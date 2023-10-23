@@ -7,6 +7,8 @@ import (
 
 	"github.com/dhowden/tag"
 	"github.com/tcolgate/mp3"
+	"playlistturbo.com/config"
+	"playlistturbo.com/plterror"
 )
 
 type Utils interface {
@@ -51,10 +53,10 @@ func GetMp3Time(r *os.File) float64 {
 
 	for {
 		if err := d.Decode(&f, &skipped); err != nil {
-			if err == io.EOF {
+			if err == io.EOF || err == io.ErrUnexpectedEOF {
 				break
 			}
-			fmt.Println(err)
+			fmt.Println(err, r.Name())
 			return t
 		}
 		t = t + f.Duration().Seconds()
@@ -76,4 +78,13 @@ func SecondsToMinutes(inSeconds int) string {
 		out = fmt.Sprintf("%02d:%02d", minutes, seconds)
 	}
 	return out
+}
+
+func ValidSongExtension(extension string) error {
+	for _, ext := range config.Config.SupportedExtensions {
+		if ext == extension {
+			return nil
+		}
+	}
+	return plterror.InvalidExtension
 }

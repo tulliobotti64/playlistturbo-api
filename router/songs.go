@@ -27,8 +27,7 @@ func SongsRoutes(ctrl controller.Controller) []Route {
 			Path:    "/import",
 			Method:  http.MethodPost,
 			Handler: ctrl.ImportSongs,
-			// Params:  []middlewares.Param{},
-			Body: dto.ImportSongs{},
+			Body:    dto.ImportSongs{},
 		},
 	}
 }

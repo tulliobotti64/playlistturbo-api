@@ -13,6 +13,8 @@ require (
 
 require (
 	github.com/dhowden/tag v0.0.0-20230630033851-978a0926ee25 // indirect
+	github.com/go-flac/flacvorbis v0.2.0
+	github.com/go-flac/go-flac v1.0.0
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect

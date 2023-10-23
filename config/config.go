@@ -9,10 +9,11 @@ import (
 var Config Configuration
 
 type Configuration struct {
-	BaseFolder  string
-	Database    DBConfig
-	Server      Server
-	StartupJobs bool
+	BaseFolder          string
+	Database            DBConfig
+	Server              Server
+	StartupJobs         bool
+	SupportedExtensions []string
 }
 
 type DBConfig struct {

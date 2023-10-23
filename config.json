@@ -12,5 +12,6 @@
         "DBType": "disable",
         "MaxOpenConns": 100
     },
-    "StartupJobs": true
+    "StartupJobs": true,
+    "SupportedExtensions": ["mp3", "flac"]
 }

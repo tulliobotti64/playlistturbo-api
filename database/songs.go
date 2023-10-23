@@ -10,6 +10,7 @@ type MusicDatabase interface {
 	AddSong(model.Song) (model.Song, error)
 	GetMainList() ([]model.Song, error)
 	SearchGenre(genre string) (uint, error)
+	SearchFilePath(filePath string) (bool, error)
 }
 
 func (p *PostgresDB) AddSong(Song model.Song) (model.Song, error) {
@@ -35,4 +36,13 @@ func (p *PostgresDB) SearchGenre(gSearch string) (uint, error) {
 	var genre model.Genre
 	p.Gorm.Where("name = ?", gSearch).Find(&genre)
 	return genre.ID, nil
+}
+
+func (p *PostgresDB) SearchFilePath(filePath string) (bool, error) {
+	var exist bool
+	err := p.Gorm.Model(model.Song{}).Select("count(*) > 0").Where("file_path = ?", filePath).Find(&exist).Error
+	if err != nil {
+		return false, err
+	}
+	return exist, nil
 }

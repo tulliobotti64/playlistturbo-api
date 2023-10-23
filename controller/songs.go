@@ -6,6 +6,7 @@ import (
 	"playlistturbo.com/dto"
 	"playlistturbo.com/model"
 	"playlistturbo.com/plterror"
+	"playlistturbo.com/utils"
 )
 
 type SongsController interface {
@@ -29,12 +30,25 @@ func (ctrl *HTTPController) GetMainList(w http.ResponseWriter, r *http.Request) 
 }
 
 func (ctrl *HTTPController) ImportSongs(w http.ResponseWriter, r *http.Request) {
-	body, ok := ctrl.GetBody(r).(dto.ImportSongs)
+	var body dto.ImportSongs
+	var ok bool
+	body, ok = ctrl.GetBody(r).(dto.ImportSongs)
 	if !ok {
-		ctrl.EncodeDataResponse(r, w, nil, plterror.ErrBadSyntax)
+		ctrl.EncodeEmptyResponse(r, w, plterror.ErrBadSyntax)
+		return
+	}
+
+	err := utils.ValidSongExtension(body.SongExtension)
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
 	}
 
 	songs, err := ctrl.Svc.ImportSongs(body)
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
+	}
 
-	ctrl.EncodeDataResponse(r, w, songs, err)
+	ctrl.EncodeDataResponse(r, w, songs, nil)
 }

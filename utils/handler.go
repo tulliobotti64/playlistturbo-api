@@ -3,8 +3,6 @@ package utils
 import (
 	"net/http"
 
-	"github.com/gofrs/uuid"
-	"playlistturbo.com/model"
 	"playlistturbo.com/plterror"
 )
 
@@ -27,10 +25,10 @@ func (utils) HandleError(err error) error {
 func (utils) HandleControllerError(r *http.Request, w http.ResponseWriter, err error) {
 	err = plterror.PropagateError(err, 3)
 
-	id, ok := r.Context().Value(&model.CtxKeyID).(uuid.UUID)
-	if !ok {
-		plterror.Logger.Info(plterror.ErrServerError) // TODO
-	}
+	// id, ok := r.Context().Value(&model.CtxKeyID).(uuid.UUID)
+	// if !ok {
+	// 	plterror.Logger.Info(plterror.ErrServerError) // TODO
+	// }
 
 	appErr, ok := err.(*plterror.PLTError)
 	if !ok {
@@ -38,9 +36,9 @@ func (utils) HandleControllerError(r *http.Request, w http.ResponseWriter, err e
 		appErr.Message = err.Error()
 	}
 
-	appErr.ID = id
+	// appErr.ID = id
 
 	http.Error(w, appErr.Error(), appErr.Status()) // TODO
 
-	appErr.Log(plterror.LogMessageErrorResponse)
+	// appErr.Log(plterror.LogMessageErrorResponse)
 }

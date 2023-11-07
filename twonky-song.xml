@@ -1,0 +1,317 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:upnp="urn:schemas-upnp-org:metadata-1-0/upnp/" xmlns:dlna="urn:schemas-dlna-org:metadata-1-0/" xmlns:pv="http://www.pv.com/pvns/" >
+    <channel>
+        <title>1987 - Surfing With The Alien</title>
+        <link>http://lynxtechnology.com</link>
+        <pubDate>Fri, 03 Nov 2023 14:01:04 GMT</pubDate>
+        <description>10 objects available in container</description>
+        <returneditems>10 objects returned from container</returneditems>
+        <language>en-us</language>
+        <copyright>LYNX TECHNOLOGY</copyright>
+        <id>0$1$13$30888$37463$37477</id>
+        <upnp:class>object.container.storageFolder</upnp:class>
+        <url>http://192.168.32.5:9000/nmc/rss/server/RBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0/IBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,</url>
+        <upnp:albumArtURI>http://127.0.0.1:9000/disk/DLNA-PNJPEG_TN-OP01-CI1-FLAGS00d00000/defaa/C/O0$1$13$30888$37463$37477.jpg?scale=org</upnp:albumArtURI>
+        <pv:childCountContainer>0</pv:childCountContainer>
+        <pv:modificationTime>25204863</pv:modificationTime>
+        <pv:containerContent>object.item.audioItem.musicTrack</pv:containerContent>
+        <childCount>10</childCount>
+        <item>
+            <title>01-Surfing With The Alien.mp3</title>
+            <enclosure url="http://192.168.32.5:9000/nmc/rss/server/RBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0/IBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NDkyOTY%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,0,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3," type="application/rss+xml"></enclosure>
+            <bookmark>uuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NDkyOTY%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,0,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3,</bookmark>
+            <meta xmlns:sec="http://www.sec.co.kr/dlna" id="0$1$13$30888$37463$37477R3649296" refID="0$1$8I3649296" parentID="0$1$13$30888$37463$37477" restricted="1">
+                <pv:duration>0:04:25</pv:duration>
+                <dc:title>01-Surfing With The Alien.mp3</dc:title>
+                <upnp:genre>Instrumental Rock</upnp:genre>
+                <upnp:album>Surfing With The Alien</upnp:album>
+                <upnp:originalTrackNumber>1</upnp:originalTrackNumber>
+                <dc:creator>Joe Satriani</dc:creator>
+                <upnp:albumArtURI dlna:profileID="JPEG_TN">http://192.168.32.5:9000/disk/DLNA-PNJPEG_TN-OP01-CI1-FLAGS00d00000/defaa/A/O0$1$8I3649296.jpg?scale=org</upnp:albumArtURI>
+                <upnp:artist>Joe Satriani</upnp:artist>
+                <upnp:albumArtist>Joe Satriani</upnp:albumArtist>
+                <pv:rating>1</pv:rating>
+                <pv:modificationTime>1353924036</pv:modificationTime>
+                <pv:addedTime>1699019212</pv:addedTime>
+                <pv:extension>mp3</pv:extension>
+                <pv:format>44.1 kHz</pv:format>
+                <upnp:author role="Composer">Joe Satriani</upnp:author>
+                <upnp:artist role="Composer">Joe Satriani</upnp:artist>
+                <PersistentBookmark>uuid:55076f6e-6b79-1d65-a4cf-0000c03c4dd4,-L25mcy9NdXNpY2FzLU1QMy9Sb2NrL1NhdHJpYW5pLzE5ODcgLSBTdXJmaW5nIFdpdGggVGhlIEFsaWVuLzAxLVN1cmZpbmcgV2l0aCBUaGUgQWxpZW4ubXAz</PersistentBookmark>
+                <res duration="0:04:25" size="10727477" sampleFrequency="44100" bitrate="40000" protocolInfo="http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_FLAGS=01700000000000000000000000000000" pv:timeseekinfo="http://192.168.32.5:9000/disk/O0$1$13$30888$37463$37477R3649296.seek">http://192.168.32.5:9000/disk/DLNA-PNMP3-OP01-FLAGS01700000/O0$1$8I3649296.mp3</res>
+                <upnp:class>object.item.audioItem.musicTrack</upnp:class>
+            </meta>
+        </item>
+        <item>
+            <title>02-Ice 9.mp3</title>
+            <enclosure url="http://192.168.32.5:9000/nmc/rss/server/RBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0/IBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NDk1NTI%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,1,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3," type="application/rss+xml"></enclosure>
+            <bookmark>uuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NDk1NTI%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,1,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3,</bookmark>
+            <meta xmlns:sec="http://www.sec.co.kr/dlna" id="0$1$13$30888$37463$37477R3649552" refID="0$1$8I3649552" parentID="0$1$13$30888$37463$37477" restricted="1">
+                <pv:duration>0:04:00</pv:duration>
+                <dc:title>02-Ice 9.mp3</dc:title>
+                <upnp:genre>Instrumental Rock</upnp:genre>
+                <upnp:album>Surfing With The Alien</upnp:album>
+                <upnp:originalTrackNumber>2</upnp:originalTrackNumber>
+                <dc:creator>Joe Satriani</dc:creator>
+                <upnp:albumArtURI dlna:profileID="JPEG_TN">http://192.168.32.5:9000/disk/DLNA-PNJPEG_TN-OP01-CI1-FLAGS00d00000/defaa/A/O0$1$8I3649552.jpg?scale=org</upnp:albumArtURI>
+                <upnp:artist>Joe Satriani</upnp:artist>
+                <upnp:albumArtist>Joe Satriani</upnp:albumArtist>
+                <pv:rating>1</pv:rating>
+                <pv:modificationTime>1353924039</pv:modificationTime>
+                <pv:addedTime>1699019212</pv:addedTime>
+                <pv:extension>mp3</pv:extension>
+                <pv:format>44.1 kHz</pv:format>
+                <upnp:author role="Composer">Joe Satriani</upnp:author>
+                <upnp:artist role="Composer">Joe Satriani</upnp:artist>
+                <PersistentBookmark>uuid:55076f6e-6b79-1d65-a4cf-0000c03c4dd4,-L25mcy9NdXNpY2FzLU1QMy9Sb2NrL1NhdHJpYW5pLzE5ODcgLSBTdXJmaW5nIFdpdGggVGhlIEFsaWVuLzAyLUljZSA5Lm1wMw==</PersistentBookmark>
+                <res duration="0:04:00" size="9712692" sampleFrequency="44100" bitrate="40000" protocolInfo="http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_FLAGS=01700000000000000000000000000000" pv:timeseekinfo="http://192.168.32.5:9000/disk/O0$1$13$30888$37463$37477R3649552.seek">http://192.168.32.5:9000/disk/DLNA-PNMP3-OP01-FLAGS01700000/O0$1$8I3649552.mp3</res>
+                <upnp:class>object.item.audioItem.musicTrack</upnp:class>
+            </meta>
+        </item>
+        <item>
+            <title>03-Crushing Day.mp3</title>
+            <enclosure url="http://192.168.32.5:9000/nmc/rss/server/RBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0/IBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NDk4MDg%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,2,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3," type="application/rss+xml"></enclosure>
+            <bookmark>uuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NDk4MDg%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,2,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3,</bookmark>
+            <meta xmlns:sec="http://www.sec.co.kr/dlna" id="0$1$13$30888$37463$37477R3649808" refID="0$1$8I3649808" parentID="0$1$13$30888$37463$37477" restricted="1">
+                <pv:duration>0:05:14</pv:duration>
+                <dc:title>03-Crushing Day.mp3</dc:title>
+                <upnp:genre>Instrumental Rock</upnp:genre>
+                <upnp:album>Surfing With The Alien</upnp:album>
+                <upnp:originalTrackNumber>3</upnp:originalTrackNumber>
+                <dc:creator>Joe Satriani</dc:creator>
+                <upnp:albumArtURI dlna:profileID="JPEG_TN">http://192.168.32.5:9000/disk/DLNA-PNJPEG_TN-OP01-CI1-FLAGS00d00000/defaa/A/O0$1$8I3649808.jpg?scale=org</upnp:albumArtURI>
+                <upnp:artist>Joe Satriani</upnp:artist>
+                <upnp:albumArtist>Joe Satriani</upnp:albumArtist>
+                <pv:rating>1</pv:rating>
+                <pv:modificationTime>1353924045</pv:modificationTime>
+                <pv:addedTime>1699019214</pv:addedTime>
+                <pv:extension>mp3</pv:extension>
+                <pv:format>44.1 kHz</pv:format>
+                <upnp:author role="Composer">Joe Satriani</upnp:author>
+                <upnp:artist role="Composer">Joe Satriani</upnp:artist>
+                <PersistentBookmark>uuid:55076f6e-6b79-1d65-a4cf-0000c03c4dd4,-L25mcy9NdXNpY2FzLU1QMy9Sb2NrL1NhdHJpYW5pLzE5ODcgLSBTdXJmaW5nIFdpdGggVGhlIEFsaWVuLzAzLUNydXNoaW5nIERheS5tcDM=</PersistentBookmark>
+                <res duration="0:05:14" size="12700627" sampleFrequency="44100" bitrate="40000" protocolInfo="http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_FLAGS=01700000000000000000000000000000" pv:timeseekinfo="http://192.168.32.5:9000/disk/O0$1$13$30888$37463$37477R3649808.seek">http://192.168.32.5:9000/disk/DLNA-PNMP3-OP01-FLAGS01700000/O0$1$8I3649808.mp3</res>
+                <upnp:class>object.item.audioItem.musicTrack</upnp:class>
+            </meta>
+        </item>
+        <item>
+            <title>04-Always With Me, Always With You.mp3</title>
+            <enclosure url="http://192.168.32.5:9000/nmc/rss/server/RBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0/IBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NTAwNjQ%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,3,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3," type="application/rss+xml"></enclosure>
+            <bookmark>uuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NTAwNjQ%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,3,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3,</bookmark>
+            <meta xmlns:sec="http://www.sec.co.kr/dlna" id="0$1$13$30888$37463$37477R3650064" refID="0$1$8I3650064" parentID="0$1$13$30888$37463$37477" restricted="1">
+                <pv:duration>0:03:22</pv:duration>
+                <dc:title>04-Always With Me, Always With You.mp3</dc:title>
+                <upnp:genre>Instrumental Rock</upnp:genre>
+                <upnp:album>Surfing With The Alien</upnp:album>
+                <upnp:originalTrackNumber>4</upnp:originalTrackNumber>
+                <dc:creator>Joe Satriani</dc:creator>
+                <upnp:albumArtURI dlna:profileID="JPEG_TN">http://192.168.32.5:9000/disk/DLNA-PNJPEG_TN-OP01-CI1-FLAGS00d00000/defaa/A/O0$1$8I3650064.jpg?scale=org</upnp:albumArtURI>
+                <upnp:artist>Joe Satriani</upnp:artist>
+                <upnp:albumArtist>Joe Satriani</upnp:albumArtist>
+                <pv:rating>1</pv:rating>
+                <pv:modificationTime>1353924048</pv:modificationTime>
+                <pv:addedTime>1699019214</pv:addedTime>
+                <pv:extension>mp3</pv:extension>
+                <pv:format>44.1 kHz</pv:format>
+                <upnp:author role="Composer">Joe Satriani</upnp:author>
+                <upnp:artist role="Composer">Joe Satriani</upnp:artist>
+                <PersistentBookmark>uuid:55076f6e-6b79-1d65-a4cf-0000c03c4dd4,-L25mcy9NdXNpY2FzLU1QMy9Sb2NrL1NhdHJpYW5pLzE5ODcgLSBTdXJmaW5nIFdpdGggVGhlIEFsaWVuLzA0LUFsd2F5cyBXaXRoIE1lLCBBbHdheXMgV2l0aCBZb3UubXAz</PersistentBookmark>
+                <res duration="0:03:22" size="8198918" sampleFrequency="44100" bitrate="40000" protocolInfo="http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_FLAGS=01700000000000000000000000000000" pv:timeseekinfo="http://192.168.32.5:9000/disk/O0$1$13$30888$37463$37477R3650064.seek">http://192.168.32.5:9000/disk/DLNA-PNMP3-OP01-FLAGS01700000/O0$1$8I3650064.mp3</res>
+                <upnp:class>object.item.audioItem.musicTrack</upnp:class>
+            </meta>
+        </item>
+        <item>
+            <title>05-Satch Boogie.mp3</title>
+            <enclosure url="http://192.168.32.5:9000/nmc/rss/server/RBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0/IBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NTAzMjA%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,4,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3," type="application/rss+xml"></enclosure>
+            <bookmark>uuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NTAzMjA%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,4,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3,</bookmark>
+            <meta xmlns:sec="http://www.sec.co.kr/dlna" id="0$1$13$30888$37463$37477R3650320" refID="0$1$8I3650320" parentID="0$1$13$30888$37463$37477" restricted="1">
+                <pv:duration>0:03:13</pv:duration>
+                <dc:title>05-Satch Boogie.mp3</dc:title>
+                <upnp:genre>Instrumental Rock</upnp:genre>
+                <upnp:album>Surfing With The Alien</upnp:album>
+                <upnp:originalTrackNumber>5</upnp:originalTrackNumber>
+                <dc:creator>Joe Satriani</dc:creator>
+                <upnp:albumArtURI dlna:profileID="JPEG_TN">http://192.168.32.5:9000/disk/DLNA-PNJPEG_TN-OP01-CI1-FLAGS00d00000/defaa/A/O0$1$8I3650320.jpg?scale=org</upnp:albumArtURI>
+                <upnp:artist>Joe Satriani</upnp:artist>
+                <upnp:albumArtist>Joe Satriani</upnp:albumArtist>
+                <pv:rating>1</pv:rating>
+                <pv:modificationTime>1353924051</pv:modificationTime>
+                <pv:addedTime>1699019214</pv:addedTime>
+                <pv:extension>mp3</pv:extension>
+                <pv:format>44.1 kHz</pv:format>
+                <upnp:author role="Composer">Joe Satriani</upnp:author>
+                <upnp:artist role="Composer">Joe Satriani</upnp:artist>
+                <PersistentBookmark>uuid:55076f6e-6b79-1d65-a4cf-0000c03c4dd4,-L25mcy9NdXNpY2FzLU1QMy9Sb2NrL1NhdHJpYW5pLzE5ODcgLSBTdXJmaW5nIFdpdGggVGhlIEFsaWVuLzA1LVNhdGNoIEJvb2dpZS5tcDM=</PersistentBookmark>
+                <res duration="0:03:13" size="7860643" sampleFrequency="44100" bitrate="40000" protocolInfo="http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_FLAGS=01700000000000000000000000000000" pv:timeseekinfo="http://192.168.32.5:9000/disk/O0$1$13$30888$37463$37477R3650320.seek">http://192.168.32.5:9000/disk/DLNA-PNMP3-OP01-FLAGS01700000/O0$1$8I3650320.mp3</res>
+                <upnp:class>object.item.audioItem.musicTrack</upnp:class>
+            </meta>
+        </item>
+        <item>
+            <title>06-Hill Of The Skull.mp3</title>
+            <enclosure url="http://192.168.32.5:9000/nmc/rss/server/RBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0/IBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NTA1NzY%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,5,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3," type="application/rss+xml"></enclosure>
+            <bookmark>uuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NTA1NzY%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,5,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3,</bookmark>
+            <meta xmlns:sec="http://www.sec.co.kr/dlna" id="0$1$13$30888$37463$37477R3650576" refID="0$1$8I3650576" parentID="0$1$13$30888$37463$37477" restricted="1">
+                <pv:duration>0:01:49</pv:duration>
+                <dc:title>06-Hill Of The Skull.mp3</dc:title>
+                <upnp:genre>Instrumental Rock</upnp:genre>
+                <upnp:album>Surfing With The Alien</upnp:album>
+                <upnp:originalTrackNumber>6</upnp:originalTrackNumber>
+                <dc:creator>Joe Satriani</dc:creator>
+                <upnp:albumArtURI dlna:profileID="JPEG_TN">http://192.168.32.5:9000/disk/DLNA-PNJPEG_TN-OP01-CI1-FLAGS00d00000/defaa/A/O0$1$8I3650576.jpg?scale=org</upnp:albumArtURI>
+                <upnp:artist>Joe Satriani</upnp:artist>
+                <upnp:albumArtist>Joe Satriani</upnp:albumArtist>
+                <pv:rating>1</pv:rating>
+                <pv:modificationTime>1353924053</pv:modificationTime>
+                <pv:addedTime>1699019214</pv:addedTime>
+                <pv:extension>mp3</pv:extension>
+                <pv:format>44.1 kHz</pv:format>
+                <upnp:author role="Composer">Joe Satriani</upnp:author>
+                <upnp:artist role="Composer">Joe Satriani</upnp:artist>
+                <PersistentBookmark>uuid:55076f6e-6b79-1d65-a4cf-0000c03c4dd4,-L25mcy9NdXNpY2FzLU1QMy9Sb2NrL1NhdHJpYW5pLzE5ODcgLSBTdXJmaW5nIFdpdGggVGhlIEFsaWVuLzA2LUhpbGwgT2YgVGhlIFNrdWxsLm1wMw==</PersistentBookmark>
+                <res duration="0:01:49" size="4465560" sampleFrequency="44100" bitrate="40000" protocolInfo="http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_FLAGS=01700000000000000000000000000000" pv:timeseekinfo="http://192.168.32.5:9000/disk/O0$1$13$30888$37463$37477R3650576.seek">http://192.168.32.5:9000/disk/DLNA-PNMP3-OP01-FLAGS01700000/O0$1$8I3650576.mp3</res>
+                <upnp:class>object.item.audioItem.musicTrack</upnp:class>
+            </meta>
+        </item>
+        <item>
+            <title>07-Circles.mp3</title>
+            <enclosure url="http://192.168.32.5:9000/nmc/rss/server/RBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0/IBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NTA4MzI%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,6,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3," type="application/rss+xml"></enclosure>
+            <bookmark>uuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NTA4MzI%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,6,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3,</bookmark>
+            <meta xmlns:sec="http://www.sec.co.kr/dlna" id="0$1$13$30888$37463$37477R3650832" refID="0$1$8I3650832" parentID="0$1$13$30888$37463$37477" restricted="1">
+                <pv:duration>0:03:29</pv:duration>
+                <dc:title>07-Circles.mp3</dc:title>
+                <upnp:genre>Instrumental Rock</upnp:genre>
+                <upnp:album>Surfing With The Alien</upnp:album>
+                <upnp:originalTrackNumber>7</upnp:originalTrackNumber>
+                <dc:creator>Joe Satriani</dc:creator>
+                <upnp:albumArtURI dlna:profileID="JPEG_TN">http://192.168.32.5:9000/disk/DLNA-PNJPEG_TN-OP01-CI1-FLAGS00d00000/defaa/A/O0$1$8I3650832.jpg?scale=org</upnp:albumArtURI>
+                <upnp:artist>Joe Satriani</upnp:artist>
+                <upnp:albumArtist>Joe Satriani</upnp:albumArtist>
+                <pv:rating>1</pv:rating>
+                <pv:modificationTime>1353924056</pv:modificationTime>
+                <pv:addedTime>1699019214</pv:addedTime>
+                <pv:extension>mp3</pv:extension>
+                <pv:format>44.1 kHz</pv:format>
+                <upnp:author role="Composer">Joe Satriani</upnp:author>
+                <upnp:artist role="Composer">Joe Satriani</upnp:artist>
+                <PersistentBookmark>uuid:55076f6e-6b79-1d65-a4cf-0000c03c4dd4,-L25mcy9NdXNpY2FzLU1QMy9Sb2NrL1NhdHJpYW5pLzE5ODcgLSBTdXJmaW5nIFdpdGggVGhlIEFsaWVuLzA3LUNpcmNsZXMubXAz</PersistentBookmark>
+                <res duration="0:03:29" size="8474510" sampleFrequency="44100" bitrate="40000" protocolInfo="http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_FLAGS=01700000000000000000000000000000" pv:timeseekinfo="http://192.168.32.5:9000/disk/O0$1$13$30888$37463$37477R3650832.seek">http://192.168.32.5:9000/disk/DLNA-PNMP3-OP01-FLAGS01700000/O0$1$8I3650832.mp3</res>
+                <upnp:class>object.item.audioItem.musicTrack</upnp:class>
+            </meta>
+        </item>
+        <item>
+            <title>08-Lords Of Karma.mp3</title>
+            <enclosure url="http://192.168.32.5:9000/nmc/rss/server/RBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0/IBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NTEwODg%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,7,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3," type="application/rss+xml"></enclosure>
+            <bookmark>uuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NTEwODg%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,7,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3,</bookmark>
+            <meta xmlns:sec="http://www.sec.co.kr/dlna" id="0$1$13$30888$37463$37477R3651088" refID="0$1$8I3651088" parentID="0$1$13$30888$37463$37477" restricted="1">
+                <pv:duration>0:04:48</pv:duration>
+                <dc:title>08-Lords Of Karma.mp3</dc:title>
+                <upnp:genre>Instrumental Rock</upnp:genre>
+                <upnp:album>Surfing With The Alien</upnp:album>
+                <upnp:originalTrackNumber>8</upnp:originalTrackNumber>
+                <dc:creator>Joe Satriani</dc:creator>
+                <upnp:albumArtURI dlna:profileID="JPEG_TN">http://192.168.32.5:9000/disk/DLNA-PNJPEG_TN-OP01-CI1-FLAGS00d00000/defaa/A/O0$1$8I3651088.jpg?scale=org</upnp:albumArtURI>
+                <upnp:artist>Joe Satriani</upnp:artist>
+                <upnp:albumArtist>Joe Satriani</upnp:albumArtist>
+                <pv:rating>1</pv:rating>
+                <pv:modificationTime>1353924062</pv:modificationTime>
+                <pv:addedTime>1699019214</pv:addedTime>
+                <pv:extension>mp3</pv:extension>
+                <pv:format>44.1 kHz</pv:format>
+                <upnp:author role="Composer">Joe Satriani</upnp:author>
+                <upnp:artist role="Composer">Joe Satriani</upnp:artist>
+                <PersistentBookmark>uuid:55076f6e-6b79-1d65-a4cf-0000c03c4dd4,-L25mcy9NdXNpY2FzLU1QMy9Sb2NrL1NhdHJpYW5pLzE5ODcgLSBTdXJmaW5nIFdpdGggVGhlIEFsaWVuLzA4LUxvcmRzIE9mIEthcm1hLm1wMw==</PersistentBookmark>
+                <res duration="0:04:48" size="11640969" sampleFrequency="44100" bitrate="40000" protocolInfo="http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_FLAGS=01700000000000000000000000000000" pv:timeseekinfo="http://192.168.32.5:9000/disk/O0$1$13$30888$37463$37477R3651088.seek">http://192.168.32.5:9000/disk/DLNA-PNMP3-OP01-FLAGS01700000/O0$1$8I3651088.mp3</res>
+                <upnp:class>object.item.audioItem.musicTrack</upnp:class>
+            </meta>
+        </item>
+        <item>
+            <title>09-Midnight.mp3</title>
+            <enclosure url="http://192.168.32.5:9000/nmc/rss/server/RBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0/IBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NTEzNDQ%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,8,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3," type="application/rss+xml"></enclosure>
+            <bookmark>uuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NTEzNDQ%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,8,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3,</bookmark>
+            <meta xmlns:sec="http://www.sec.co.kr/dlna" id="0$1$13$30888$37463$37477R3651344" refID="0$1$8I3651344" parentID="0$1$13$30888$37463$37477" restricted="1">
+                <pv:duration>0:01:43</pv:duration>
+                <dc:title>09-Midnight.mp3</dc:title>
+                <upnp:genre>Instrumental Rock</upnp:genre>
+                <upnp:album>Surfing With The Alien</upnp:album>
+                <upnp:originalTrackNumber>9</upnp:originalTrackNumber>
+                <dc:creator>Joe Satriani</dc:creator>
+                <upnp:albumArtURI dlna:profileID="JPEG_TN">http://192.168.32.5:9000/disk/DLNA-PNJPEG_TN-OP01-CI1-FLAGS00d00000/defaa/A/O0$1$8I3651344.jpg?scale=org</upnp:albumArtURI>
+                <upnp:artist>Joe Satriani</upnp:artist>
+                <upnp:albumArtist>Joe Satriani</upnp:albumArtist>
+                <pv:rating>1</pv:rating>
+                <pv:modificationTime>1353924063</pv:modificationTime>
+                <pv:addedTime>1699019214</pv:addedTime>
+                <pv:extension>mp3</pv:extension>
+                <pv:format>44.1 kHz</pv:format>
+                <upnp:author role="Composer">Joe Satriani</upnp:author>
+                <upnp:artist role="Composer">Joe Satriani</upnp:artist>
+                <PersistentBookmark>uuid:55076f6e-6b79-1d65-a4cf-0000c03c4dd4,-L25mcy9NdXNpY2FzLU1QMy9Sb2NrL1NhdHJpYW5pLzE5ODcgLSBTdXJmaW5nIFdpdGggVGhlIEFsaWVuLzA5LU1pZG5pZ2h0Lm1wMw==</PersistentBookmark>
+                <res duration="0:01:43" size="4226475" sampleFrequency="44100" bitrate="40000" protocolInfo="http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_FLAGS=01700000000000000000000000000000" pv:timeseekinfo="http://192.168.32.5:9000/disk/O0$1$13$30888$37463$37477R3651344.seek">http://192.168.32.5:9000/disk/DLNA-PNMP3-OP01-FLAGS01700000/O0$1$8I3651344.mp3</res>
+                <upnp:class>object.item.audioItem.musicTrack</upnp:class>
+            </meta>
+        </item>
+        <item>
+            <title>10-Echo.mp3</title>
+            <enclosure url="http://192.168.32.5:9000/nmc/rss/server/RBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0/IBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NTE2MDA%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,9,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3," type="application/rss+xml"></enclosure>
+            <bookmark>uuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3UjM2NTE2MDA%3D,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,,1,0,_U2F0cmlhbmk%3D,_MCQxJDEzJDMwODg4JDM3NDYz,,9,0,_MTk4NyAtIFN1cmZpbmcgV2l0aCBUaGUgQWxpZW4%3D,_MCQxJDEzJDMwODg4JDM3NDYzJDM3NDc3,</bookmark>
+            <meta xmlns:sec="http://www.sec.co.kr/dlna" id="0$1$13$30888$37463$37477R3651600" refID="0$1$8I3651600" parentID="0$1$13$30888$37463$37477" restricted="1">
+                <pv:duration>0:05:38</pv:duration>
+                <dc:title>10-Echo.mp3</dc:title>
+                <upnp:genre>Instrumental Rock</upnp:genre>
+                <upnp:album>Surfing With The Alien</upnp:album>
+                <upnp:originalTrackNumber>10</upnp:originalTrackNumber>
+                <dc:creator>Joe Satriani</dc:creator>
+                <upnp:albumArtURI dlna:profileID="JPEG_TN">http://192.168.32.5:9000/disk/DLNA-PNJPEG_TN-OP01-CI1-FLAGS00d00000/defaa/A/O0$1$8I3651600.jpg?scale=org</upnp:albumArtURI>
+                <upnp:artist>Joe Satriani</upnp:artist>
+                <upnp:albumArtist>Joe Satriani</upnp:albumArtist>
+                <pv:rating>1</pv:rating>
+                <pv:modificationTime>1353924067</pv:modificationTime>
+                <pv:addedTime>1699019214</pv:addedTime>
+                <pv:extension>mp3</pv:extension>
+                <pv:format>44.1 kHz</pv:format>
+                <upnp:author role="Composer">Joe Satriani</upnp:author>
+                <upnp:artist role="Composer">Joe Satriani</upnp:artist>
+                <PersistentBookmark>uuid:55076f6e-6b79-1d65-a4cf-0000c03c4dd4,-L25mcy9NdXNpY2FzLU1QMy9Sb2NrL1NhdHJpYW5pLzE5ODcgLSBTdXJmaW5nIFdpdGggVGhlIEFsaWVuLzEwLUVjaG8ubXAz</PersistentBookmark>
+                <res duration="0:05:38" size="13625604" sampleFrequency="44100" bitrate="40000" protocolInfo="http-get:*:audio/mpeg:DLNA.ORG_PN=MP3;DLNA.ORG_OP=01;DLNA.ORG_FLAGS=01700000000000000000000000000000" pv:timeseekinfo="http://192.168.32.5:9000/disk/O0$1$13$30888$37463$37477R3651600.seek">http://192.168.32.5:9000/disk/DLNA-PNMP3-OP01-FLAGS01700000/O0$1$8I3651600.mp3</res>
+                <upnp:class>object.item.audioItem.musicTrack</upnp:class>
+            </meta>
+        </item>
+        <parentList>
+            <parent>
+                <id>0$1$13$30888$37463</id>
+                <title>Satriani</title>
+                <upnp:class>object.container.storageFolder</upnp:class>
+                <childCount>22</childCount>
+                <url>http://192.168.32.5:9000/nmc/rss/server/RBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0/IBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4JDM3NDYz,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,,115,0,_Um9jaw%3D%3D,_MCQxJDEzJDMwODg4,</url>
+            </parent>
+            <parent>
+                <id>0$1$13$30888</id>
+                <title>Rock</title>
+                <upnp:class>object.container.storageFolder</upnp:class>
+                <childCount>149</childCount>
+                <url>http://192.168.32.5:9000/nmc/rss/server/RBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0/IBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEzJDMwODg4,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,,23,0,_QnkgRm9sZGVy,_MCQxJDEz,</url>
+            </parent>
+            <parent>
+                <id>0$1$13</id>
+                <title>By Folder</title>
+                <upnp:class>object.container.storageFolder</upnp:class>
+                <childCount>29</childCount>
+                <url>http://192.168.32.5:9000/nmc/rss/server/RBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0/IBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEz,,0,0,_Um9vdA%3D%3D,0,,1,0,_TXVzaWM%3D,_MCQx,</url>
+            </parent>
+            <parent>
+                <id>0$1</id>
+                <title>Music</title>
+                <upnp:class>object.container</upnp:class>
+                <childCount>2</childCount>
+                <url>http://192.168.32.5:9000/nmc/rss/server/RBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0/IBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQx,,0,0,_Um9vdA%3D%3D,0,</url>
+            </parent>
+            <parent>
+                <id>0</id>
+                <title>Root</title>
+                <upnp:class>object.container</upnp:class>
+                <childCount>2</childCount>
+                <url>http://192.168.32.5:9000/nmc/rss/server/RBuuid%3A55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0</url>
+            </parent>
+        </parentList>
+    </channel>
+</rss>

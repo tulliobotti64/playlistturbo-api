@@ -3,9 +3,10 @@ package dto
 import "time"
 
 type ImportSongs struct {
-	Path          string `json:"path"`
-	Recursive     bool   `json:"recursive"`
-	SongExtension string `json:"songExtension"`
+	Genre     string `json:"genre"`
+	Artist    string `json:"artist"`
+	Album     string `json:"album"`
+	Extension string `json:"extension"`
 }
 
 type SongMetadata struct {
@@ -20,8 +21,15 @@ type SongMetadata struct {
 
 type ImportedSongs struct {
 	Message   string
-	Qty       int
+	ArtistQty int
+	AlbumQty  int
+	SongQty   int
 	StartTime time.Time
 	EndTime   time.Time
 	Duration  string
+}
+
+type ImportAlbums struct {
+	AlbumURL   string
+	AlbumTitle string
 }

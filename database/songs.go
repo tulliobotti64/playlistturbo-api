@@ -34,7 +34,7 @@ func (p *PostgresDB) GetMainList() ([]model.Song, error) {
 
 func (p *PostgresDB) SearchGenre(gSearch string) (uint, error) {
 	var genre model.Genre
-	p.Gorm.Where("name = ?", gSearch).Find(&genre)
+	p.Gorm.Where("lower(name) = ?", gSearch).Find(&genre)
 	return genre.ID, nil
 }
 

@@ -20,8 +20,19 @@ type SongMetadata struct {
 
 type ImportedSongs struct {
 	Message   string
-	Qty       int
+	ArtistQty int
+	AlbumQty  int
+	SongQty   int
 	StartTime time.Time
 	EndTime   time.Time
 	Duration  string
+}
+
+type SongExtraTable struct {
+	Filename    string
+	URL         string
+	Frequency   int
+	Bitrate     int
+	AlbumArtURI string
+	Duration    string
 }

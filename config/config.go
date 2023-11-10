@@ -9,20 +9,21 @@ import (
 var Config Configuration
 
 type Configuration struct {
-	BaseFolder          string
-	Database            DBConfig
+	BaseURL             string
 	Server              Server
+	Database            DBConfig
 	StartupJobs         bool
 	SupportedExtensions []string
+	DlnaGenreUrl        string
 }
 
 type DBConfig struct {
-	DBType       string
 	DBAddr       string
 	DBPort       string
 	DBName       string
 	DBUser       string
 	DBPass       string
+	DBType       string
 	MaxOpenConns int
 }
 

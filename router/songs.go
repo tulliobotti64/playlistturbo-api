@@ -6,6 +6,7 @@ import (
 	"playlistturbo.com/controller"
 	"playlistturbo.com/dto"
 	"playlistturbo.com/model"
+	"playlistturbo.com/router/middlewares"
 )
 
 func SongsRoutes(ctrl controller.Controller) []Route {
@@ -20,14 +21,25 @@ func SongsRoutes(ctrl controller.Controller) []Route {
 			Path:    "/mainlist",
 			Method:  http.MethodGet,
 			Handler: ctrl.GetMainList,
-			// Params:  []middlewares.Param{},
-			Body: nil,
+			Body:    nil,
 		},
 		{
 			Path:    "/import",
 			Method:  http.MethodPost,
 			Handler: ctrl.ImportSongs,
 			Body:    dto.ImportSongs{},
+		},
+		{
+			Path:    "/{title}",
+			Method:  http.MethodGet,
+			Handler: ctrl.GetSongsByTitle,
+			Body:    nil,
+			Params: middlewares.Params{
+				{
+					Name:       "title",
+					Validation: "required",
+				},
+			},
 		},
 	}
 }

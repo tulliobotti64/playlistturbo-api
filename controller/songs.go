@@ -13,6 +13,7 @@ type SongsController interface {
 	AddSong(w http.ResponseWriter, r *http.Request)
 	GetMainList(w http.ResponseWriter, r *http.Request)
 	ImportSongs(w http.ResponseWriter, r *http.Request)
+	GetSongsByTitle(w http.ResponseWriter, r *http.Request)
 }
 
 func (ctrl *HTTPController) AddSong(w http.ResponseWriter, r *http.Request) {
@@ -51,4 +52,19 @@ func (ctrl *HTTPController) ImportSongs(w http.ResponseWriter, r *http.Request) 
 	}
 
 	ctrl.EncodeDataResponse(r, w, songs, nil)
+}
+
+func (ctrl *HTTPController) GetSongsByTitle(w http.ResponseWriter, r *http.Request) {
+	title := ctrl.GetParam(r, "title")
+	// ctrl.Utils.GetParam()
+	if title == "" {
+		ctrl.EncodeEmptyResponse(r, w, plterror.ErrBadSyntax)
+		return
+	}
+	resp, err := ctrl.Svc.GetSongsByTitle(title)
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
+	}
+	ctrl.EncodeDataResponse(r, w, resp, nil)
 }

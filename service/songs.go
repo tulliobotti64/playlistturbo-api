@@ -16,6 +16,7 @@ import (
 	"github.com/dhowden/tag"
 	"github.com/go-flac/flacvorbis"
 	"github.com/go-flac/go-flac"
+	"playlistturbo.com/config"
 	"playlistturbo.com/dto"
 	"playlistturbo.com/model"
 	"playlistturbo.com/plterror"
@@ -31,6 +32,7 @@ type SongsService interface {
 	AddSong(model.Song) error
 	GetMainList() ([]model.Song, error)
 	ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSongs, error)
+	GetSongsByTitle(title string) ([]dto.Songs, error)
 }
 
 func (svc *PLTService) AddSong(Song model.Song) error {
@@ -55,7 +57,18 @@ func (svc *PLTService) ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSon
 	var msg dto.ImportedSongs
 	msg.Message = "Quantidade de musicas importadas:"
 	msg.StartTime = time.Now()
+
+	//verify path
+	info, err := os.Stat(importSongs.Path)
+	if err != nil || !info.IsDir() {
+		return msg, plterror.InvalidSongPath
+	}
+
 	arrPath := strings.Split(importSongs.Path, "/")
+	if len(arrPath) < 5 {
+		return msg, plterror.InvalidSongPath
+	}
+
 	genre := arrPath[4]
 	//pegar lista dos Diretorios de Generos do Nas
 	nasGenreURL, err := GetTwonkyGenre(genre)
@@ -63,20 +76,26 @@ func (svc *PLTService) ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSon
 		return msg, err
 	}
 
-	artist := arrPath[5]
-	nasArtistURL, err := GetTwonkyArtistFolder(nasGenreURL, artist)
+	artist := ""
+	if len(arrPath)-1 > 4 {
+		artist = arrPath[5]
+	}
+	nasArtistURL, err := GetTwonkyArtistFolder(nasGenreURL, artist, &msg)
 	if err != nil {
 		return msg, err
 	}
 
 	var albumLinkList []string
-	album := arrPath[6]
-	albumLinkList, err = GetArtistAlbumList(nasArtistURL, album)
+	album := ""
+	if len(arrPath)-1 > 5 {
+		artist = arrPath[6]
+	}
+	albumLinkList, err = GetArtistAlbumList(nasArtistURL, album, &msg)
 	if err != nil {
 		return msg, err
 	}
 
-	songLinkList, err := GetAlbumSongList(albumLinkList, album)
+	songExtraTable, err := GetAlbumSongList(albumLinkList, album, &msg, importSongs.SongExtension)
 	if err != nil {
 		return msg, err
 	}
@@ -94,8 +113,8 @@ func (svc *PLTService) ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSon
 		song := model.Song{}
 		var err error
 		if strings.Contains(songPath, "mp3") {
-			songTitle := strings.Split(songPath, "/")
-			song, err = svc.processMp3(songPath, songLinkList[songTitle[7]])
+			// songTitle := strings.Split(songPath, "/")
+			song, err = svc.processMp3(songPath, songExtraTable)
 			if err != nil {
 				return msg, err
 			}
@@ -120,7 +139,7 @@ func (svc *PLTService) ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSon
 				fmt.Printf("error : %v\n", err)
 				return msg, nil
 			}
-			msg.Qty++
+			msg.SongQty++
 		}
 	}
 
@@ -136,7 +155,7 @@ func (svc *PLTService) ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSon
 	return msg, nil
 }
 
-func (svc *PLTService) processMp3(songPath string, songLink string) (model.Song, error) {
+func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtraTable) (model.Song, error) {
 	var songMp3 model.Song
 	f, err := os.Open(songPath)
 	if err != nil {
@@ -144,15 +163,35 @@ func (svc *PLTService) processMp3(songPath string, songLink string) (model.Song,
 	}
 	defer f.Close()
 
+	genreTagAux := ""
+	albumAux := "Unknonwn"
+	artistAux := "Unknonwn"
+	titleAux := "Unknonwn"
+	trackAux := 0
+	var yearAux uint = 0
+	var genreID uint = 1
+	pathSplit := strings.Split(songPath, "/")
+	pIndex := len(pathSplit) - 1
+	fname := pathSplit[pIndex]
+
 	mp3Tag, err := tag.ReadFrom(f)
 	if err != nil {
 		fmt.Printf("error reading file: %v\n", err)
-		return songMp3, nil
+		fmt.Println("file:", songPath)
+		// return songMp3, err
+	} else {
+		genreTagAux = mp3Tag.Genre()
+		albumAux = mp3Tag.Album()
+		yearAux = uint(mp3Tag.Year())
+		artistAux = mp3Tag.Artist()
+		titleAux = mp3Tag.Title()
+		trackAux, _ = mp3Tag.Track()
 	}
 
-	mp3Sec := utils.GetMp3Time(f)
-	genreTag := mp3Tag.Genre()
-	genreID, err := svc.DB.SearchGenre(genreTag)
+	if genreTagAux == "" {
+		genreTagAux = pathSplit[4]
+	}
+	genreID, err = svc.DB.SearchGenre(genreTagAux)
 	if err != nil {
 		return songMp3, plterror.ErrServerError
 	}
@@ -160,17 +199,31 @@ func (svc *PLTService) processMp3(songPath string, songLink string) (model.Song,
 		genreID = 1
 	}
 
-	songMp3.Album = mp3Tag.Album()
-	songMp3.AlbumYear = uint(mp3Tag.Year())
-	songMp3.Artist = mp3Tag.Artist()
+	// mp3Sec := utils.GetMp3Time(f)  -- it takes forever to retrieve the duration
+	// songMp3.Lenght = utils.SecondsToMinutes(int(mp3Sec))
+	// songMp3.LenghtSec = mp3Sec
+
+	songMp3.Album = albumAux
+	songMp3.AlbumDate = yearAux
+	songMp3.Artist = artistAux
 	songMp3.GenreID = genreID
-	songMp3.GenreTag = genreTag
-	songMp3.Lenght = utils.SecondsToMinutes(int(mp3Sec))
-	songMp3.LenghtSec = mp3Sec
-	songMp3.Title = mp3Tag.Title()
+	songMp3.GenreTag = genreTagAux
+	songMp3.Title = titleAux
 	songMp3.UpdatedAt = time.Now()
-	songMp3.TwonkyLink = songLink
 	songMp3.FilePath = songPath
+	songMp3.TrackNumber = uint(trackAux)
+	songMp3.Format = "mp3"
+
+	for _, s := range songExtraTable {
+		if s.Filename == fname {
+			songMp3.TwonkyLink = s.URL
+			songMp3.SampleFrequency = uint(s.Frequency)
+			songMp3.Bitrate = uint(s.Bitrate)
+			songMp3.AlbumArtURI = s.AlbumArtURI
+			songMp3.Lenght = s.Duration
+			break
+		}
+	}
 
 	return songMp3, nil
 }
@@ -187,7 +240,7 @@ func (svc *PLTService) processFlac(songPath string) (model.Song, error) {
 	}
 
 	flacLenght := data.SampleCount / int64(data.SampleRate)
-	var genrex, albumx, titlex, artistx string
+	var genrex, albumx, titlex, artistx, trackx string
 	var yearx int = 0
 	var cmt *flacvorbis.MetaDataBlockVorbisComment
 
@@ -202,7 +255,8 @@ func (svc *PLTService) processFlac(songPath string) (model.Song, error) {
 			titlex = title[0]
 			album, _ := cmt.Get("ALBUM")
 			albumx = album[0]
-			// track, _ := cmt.Get("TRACKNUMBER")
+			track, _ := cmt.Get("TRACKNUMBER")
+			trackx = track[0]
 			artist, _ := cmt.Get("ARTIST")
 			artistx = artist[0]
 			genre, _ := cmt.Get("GENRE")
@@ -222,7 +276,7 @@ func (svc *PLTService) processFlac(songPath string) (model.Song, error) {
 		genreID = 1
 	}
 	songFlac.Album = albumx
-	songFlac.AlbumYear = uint(yearx)
+	songFlac.AlbumDate = uint(yearx)
 	songFlac.Artist = artistx
 	songFlac.GenreID = genreID
 	songFlac.Lenght = utils.SecondsToMinutes(int(flacLenght))
@@ -230,6 +284,8 @@ func (svc *PLTService) processFlac(songPath string) (model.Song, error) {
 	songFlac.Title = titlex
 	songFlac.UpdatedAt = time.Now()
 	songFlac.FilePath = songPath
+	tracki, _ := strconv.Atoi(trackx)
+	songFlac.TrackNumber = uint(tracki)
 	return songFlac, nil
 }
 
@@ -263,10 +319,9 @@ func (svc *PLTService) WalkMatch(root, pattern string, recursive bool) ([]string
 
 func GetTwonkyGenre(genre string) (string, error) {
 
-	URLGenreList := "http://192."
 	url := ""
 
-	req, err := http.NewRequest(http.MethodGet, URLGenreList, nil)
+	req, err := http.NewRequest(http.MethodGet, config.Config.DlnaGenreUrl, nil)
 	if err != nil {
 		return url, err
 	}
@@ -274,7 +329,7 @@ func GetTwonkyGenre(genre string) (string, error) {
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println("resp:", resp)
-		return url, err
+		return url, plterror.ErrDLNAAccess
 	}
 	defer resp.Body.Close()
 
@@ -295,10 +350,14 @@ func GetTwonkyGenre(genre string) (string, error) {
 		}
 	}
 
+	if len(url) == 0 {
+		return url, plterror.InvalidGenre
+	}
+
 	return url, nil
 }
 
-func GetTwonkyArtistFolder(urlArtist, artist string) ([]string, error) {
+func GetTwonkyArtistFolder(urlArtist, artist string, msg *dto.ImportedSongs) ([]string, error) {
 	var url []string
 	takeAll := false
 	if len(artist) == 0 {
@@ -321,17 +380,14 @@ func GetTwonkyArtistFolder(urlArtist, artist string) ([]string, error) {
 	var artistFolder dto.TwonkyArtistAlbumFolder
 
 	if err := xml.Unmarshal([]byte(body), &artistFolder); err != nil {
-		fmt.Println("fudeu", err)
+		log.Println("unmarshal:", err)
 		return url, err
 	}
 
 	for _, item := range artistFolder.Channel.Item {
-		if takeAll {
+		if takeAll || artist == item.Title {
 			url = append(url, item.Enclosure.Url)
-		} else {
-			if artist == item.Title {
-				url = append(url, item.Enclosure.Url)
-			}
+			msg.ArtistQty++
 		}
 	}
 	if len(url) == 0 {
@@ -341,12 +397,13 @@ func GetTwonkyArtistFolder(urlArtist, artist string) ([]string, error) {
 	return url, nil
 }
 
-func GetArtistAlbumList(nasArtistAlbumURL []string, oneAlbum string) ([]string, error) {
+func GetArtistAlbumList(nasArtistAlbumURL []string, oneAlbum string, msg *dto.ImportedSongs) ([]string, error) {
 	var albumList []string
 	takeAll := false
 	if len(oneAlbum) == 0 {
 		takeAll = true
 	}
+	msg.AlbumQty = len(nasArtistAlbumURL)
 
 	for _, album := range nasArtistAlbumURL {
 		req, err := http.NewRequest(http.MethodGet, album, nil)
@@ -367,17 +424,13 @@ func GetArtistAlbumList(nasArtistAlbumURL []string, oneAlbum string) ([]string, 
 		var artistAlbumList dto.TwonkyArtistAlbumFolder
 
 		if err := xml.Unmarshal([]byte(body), &artistAlbumList); err != nil {
-			fmt.Println("fudeu", err)
+			log.Println("unmarshal:", err)
 			return albumList, err
 		}
 
 		for _, item := range artistAlbumList.Channel.Item {
-			if takeAll {
+			if takeAll || oneAlbum == item.Title {
 				albumList = append(albumList, item.Enclosure.Url)
-			} else {
-				if oneAlbum == item.Title {
-					albumList = append(albumList, item.Enclosure.Url)
-				}
 			}
 		}
 	}
@@ -385,8 +438,8 @@ func GetArtistAlbumList(nasArtistAlbumURL []string, oneAlbum string) ([]string, 
 	return albumList, nil
 }
 
-func GetAlbumSongList(albumUrlList []string, album string) (map[string]string, error) {
-	songList := make(map[string]string)
+func GetAlbumSongList(albumUrlList []string, album string, msg *dto.ImportedSongs, ext string) ([]dto.SongExtraTable, error) {
+	songList := make([]dto.SongExtraTable, 0)
 	takeAll := false
 	if len(album) == 0 {
 		takeAll = true
@@ -411,20 +464,42 @@ func GetAlbumSongList(albumUrlList []string, album string) (map[string]string, e
 		var albumSongList dto.TwonkySongList
 
 		if err := xml.Unmarshal([]byte(body), &albumSongList); err != nil {
-			fmt.Println("fudeu", err)
+			log.Println("unmarshal:", err)
 			return songList, err
 		}
 
 		for _, item := range albumSongList.Channel.Item {
-			if takeAll {
-				songList[item.Title] = item.Meta.Res.CharData
-			} else {
-				if album == item.Title {
-					songList[item.Title] = item.Meta.Res.CharData
+			if takeAll || album == item.Title {
+				entry := dto.SongExtraTable{
+					Filename:    item.Title,
+					URL:         item.Meta.Res.CharData,
+					Frequency:   item.Meta.Res.SampleFrequency,
+					Bitrate:     item.Meta.Res.Bitrate,
+					Duration:    item.Meta.Res.Duration,
+					AlbumArtURI: item.Meta.AlbumArtURI.CharData,
+				}
+
+				if item.Meta.Extension == ext {
+					songList = append(songList, entry)
 				}
 			}
 		}
 	}
 
 	return songList, nil
+}
+
+func (svc *PLTService) GetSongsByTitle(title string) ([]dto.Songs, error) {
+	var songs []dto.Songs
+	songsDB, err := svc.DB.GetSongsByTitle(title)
+	if err != nil {
+		return songs, err
+	}
+
+	for _, songDB := range songsDB {
+		var song dto.Songs
+		song = dto.ToDtoSongs(songDB, song)
+		songs = append(songs, song)
+	}
+	return songs, nil
 }

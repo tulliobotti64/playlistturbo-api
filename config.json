@@ -13,5 +13,6 @@
         "MaxOpenConns": 100
     },
     "StartupJobs": true,
-    "SupportedExtensions": ["mp3", "flac"]
+    "SupportedExtensions": ["mp3", "flac"],
+    "DlnaGenreUrl": "http://192."
 }

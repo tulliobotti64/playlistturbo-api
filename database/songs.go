@@ -1,6 +1,8 @@
 package database
 
 import (
+	"strings"
+
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"playlistturbo.com/model"
@@ -11,6 +13,7 @@ type MusicDatabase interface {
 	GetMainList() ([]model.Song, error)
 	SearchGenre(genre string) (uint, error)
 	SearchFilePath(filePath string) (bool, error)
+	GetSongsByTitle(title string) ([]model.Song, error)
 }
 
 func (p *PostgresDB) AddSong(Song model.Song) (model.Song, error) {
@@ -34,7 +37,8 @@ func (p *PostgresDB) GetMainList() ([]model.Song, error) {
 
 func (p *PostgresDB) SearchGenre(gSearch string) (uint, error) {
 	var genre model.Genre
-	p.Gorm.Where("lower(name) = ?", gSearch).Find(&genre)
+	gs := strings.ToLower(gSearch)
+	p.Gorm.Where("lower(name) = ?", gs).Find(&genre)
 	return genre.ID, nil
 }
 
@@ -45,4 +49,16 @@ func (p *PostgresDB) SearchFilePath(filePath string) (bool, error) {
 		return false, err
 	}
 	return exist, nil
+}
+func (p *PostgresDB) GetSongsByTitle(title string) ([]model.Song, error) {
+	var songs []model.Song
+	titlex := "%" + title + "%"
+	err := p.Gorm.Model(&songs).
+		Where("title ilike ?", titlex).
+		Find(&songs).
+		Error
+	if err != nil {
+		return songs, err
+	}
+	return songs, nil
 }

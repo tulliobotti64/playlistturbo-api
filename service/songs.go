@@ -16,6 +16,7 @@ import (
 	"github.com/dhowden/tag"
 	"github.com/go-flac/flacvorbis"
 	"github.com/go-flac/go-flac"
+	"playlistturbo.com/config"
 	"playlistturbo.com/dto"
 	"playlistturbo.com/model"
 	"playlistturbo.com/plterror"
@@ -31,6 +32,7 @@ type SongsService interface {
 	AddSong(model.Song) error
 	GetMainList() ([]model.Song, error)
 	ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSongs, error)
+	GetSongsByTitle(title string) ([]dto.Songs, error)
 }
 
 func (svc *PLTService) AddSong(Song model.Song) error {
@@ -161,15 +163,35 @@ func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtr
 	}
 	defer f.Close()
 
+	genreTagAux := ""
+	albumAux := "Unknonwn"
+	artistAux := "Unknonwn"
+	titleAux := "Unknonwn"
+	trackAux := 0
+	var yearAux uint = 0
+	var genreID uint = 1
+	pathSplit := strings.Split(songPath, "/")
+	pIndex := len(pathSplit) - 1
+	fname := pathSplit[pIndex]
+
 	mp3Tag, err := tag.ReadFrom(f)
 	if err != nil {
 		fmt.Printf("error reading file: %v\n", err)
-		return songMp3, nil
+		fmt.Println("file:", songPath)
+		// return songMp3, err
+	} else {
+		genreTagAux = mp3Tag.Genre()
+		albumAux = mp3Tag.Album()
+		yearAux = uint(mp3Tag.Year())
+		artistAux = mp3Tag.Artist()
+		titleAux = mp3Tag.Title()
+		trackAux, _ = mp3Tag.Track()
 	}
 
-	// mp3Sec := utils.GetMp3Time(f)  -- it takes forever to retrieve the duration
-	genreTag := mp3Tag.Genre()
-	genreID, err := svc.DB.SearchGenre(genreTag)
+	if genreTagAux == "" {
+		genreTagAux = pathSplit[4]
+	}
+	genreID, err = svc.DB.SearchGenre(genreTagAux)
 	if err != nil {
 		return songMp3, plterror.ErrServerError
 	}
@@ -177,24 +199,20 @@ func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtr
 		genreID = 1
 	}
 
-	songMp3.Album = mp3Tag.Album()
-	songMp3.AlbumDate = uint(mp3Tag.Year())
-	songMp3.Artist = mp3Tag.Artist()
-	songMp3.GenreID = genreID
-	songMp3.GenreTag = genreTag
+	// mp3Sec := utils.GetMp3Time(f)  -- it takes forever to retrieve the duration
 	// songMp3.Lenght = utils.SecondsToMinutes(int(mp3Sec))
 	// songMp3.LenghtSec = mp3Sec
-	songMp3.Title = mp3Tag.Title()
+
+	songMp3.Album = albumAux
+	songMp3.AlbumDate = yearAux
+	songMp3.Artist = artistAux
+	songMp3.GenreID = genreID
+	songMp3.GenreTag = genreTagAux
+	songMp3.Title = titleAux
 	songMp3.UpdatedAt = time.Now()
 	songMp3.FilePath = songPath
-
-	pathSplit := strings.Split(songPath, "/")
-	pIndex := len(pathSplit) - 1
-	fname := pathSplit[pIndex]
-
-	track, _ := mp3Tag.Track()
-	songMp3.TrackNumber = uint(track)
-	songMp3.Format = string(mp3Tag.Format())
+	songMp3.TrackNumber = uint(trackAux)
+	songMp3.Format = "mp3"
 
 	for _, s := range songExtraTable {
 		if s.Filename == fname {
@@ -301,10 +319,9 @@ func (svc *PLTService) WalkMatch(root, pattern string, recursive bool) ([]string
 
 func GetTwonkyGenre(genre string) (string, error) {
 
-	URLGenreList := "http://192.168.32.5:9000/nmc/rss/server/RBuuid:55076f6e-6b79-1d65-a4cf-0000c03c4dd4,0/IBuuid:55076f6e-6b79-1d65-a4cf-0000c03c4dd4,_MCQxJDEz,,0,0,_Um9vdA==,0,,1,0,_TXVzaWM=,_MCQx,?start=0&count=40&fmt=json"
 	url := ""
 
-	req, err := http.NewRequest(http.MethodGet, URLGenreList, nil)
+	req, err := http.NewRequest(http.MethodGet, config.Config.DlnaGenreUrl, nil)
 	if err != nil {
 		return url, err
 	}
@@ -470,4 +487,19 @@ func GetAlbumSongList(albumUrlList []string, album string, msg *dto.ImportedSong
 	}
 
 	return songList, nil
+}
+
+func (svc *PLTService) GetSongsByTitle(title string) ([]dto.Songs, error) {
+	var songs []dto.Songs
+	songsDB, err := svc.DB.GetSongsByTitle(title)
+	if err != nil {
+		return songs, err
+	}
+
+	for _, songDB := range songsDB {
+		var song dto.Songs
+		song = dto.ToDtoSongs(songDB, song)
+		songs = append(songs, song)
+	}
+	return songs, nil
 }

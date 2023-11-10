@@ -1,6 +1,10 @@
 package dto
 
-import "time"
+import (
+	"time"
+
+	"playlistturbo.com/model"
+)
 
 type ImportSongs struct {
 	Path          string `json:"path"`
@@ -35,4 +39,23 @@ type SongExtraTable struct {
 	Bitrate     int
 	AlbumArtURI string
 	Duration    string
+}
+
+type Songs struct {
+	Artist      string `json:"artist"`
+	Album       string `json:"album"`
+	Title       string `json:"title"`
+	TwonkyLink  string `json:"songUrl"`
+	AlbumArtURI string `json:"albumArtUri"`
+}
+
+func ToDtoSongs(i model.Song, songDto Songs) Songs {
+	dto := Songs{
+		Artist:      i.Artist,
+		Album:       i.Album,
+		Title:       i.Title,
+		TwonkyLink:  i.TwonkyLink,
+		AlbumArtURI: i.AlbumArtURI,
+	}
+	return dto
 }

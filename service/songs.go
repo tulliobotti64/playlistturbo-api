@@ -88,14 +88,19 @@ func (svc *PLTService) ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSon
 	var albumLinkList []string
 	album := ""
 	if len(arrPath)-1 > 5 {
-		artist = arrPath[6]
+		album = arrPath[6]
 	}
 	albumLinkList, err = GetArtistAlbumList(nasArtistURL, album, &msg)
 	if err != nil {
 		return msg, err
 	}
 
-	songExtraTable, err := GetAlbumSongList(albumLinkList, album, &msg, importSongs.SongExtension)
+	albumCDList, err := GetArtistAlbumCDList(albumLinkList)
+	if err != nil {
+		return msg, err
+	}
+
+	songExtraTable, err := GetAlbumSongList(albumCDList, &msg, importSongs.SongExtension)
 	if err != nil {
 		return msg, err
 	}
@@ -215,6 +220,8 @@ func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtr
 	songMp3.Format = "mp3"
 
 	for _, s := range songExtraTable {
+		// t := transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
+		// result, _, _ := transform.String(t, fname)
 		if s.Filename == fname {
 			songMp3.TwonkyLink = s.URL
 			songMp3.SampleFrequency = uint(s.Frequency)
@@ -437,17 +444,46 @@ func GetArtistAlbumList(nasArtistAlbumURL []string, oneAlbum string, msg *dto.Im
 
 	return albumList, nil
 }
+func GetArtistAlbumCDList(nasArtistAlbumCDURL []string) ([]string, error) {
+	var albumList []string
 
-func GetAlbumSongList(albumUrlList []string, album string, msg *dto.ImportedSongs, ext string) ([]dto.SongExtraTable, error) {
-	songList := make([]dto.SongExtraTable, 0)
-	takeAll := false
-	if len(album) == 0 {
-		takeAll = true
+	for _, album := range nasArtistAlbumCDURL {
+		req, err := http.NewRequest(http.MethodGet, album, nil)
+		if err != nil {
+			return albumList, err
+		}
+
+		client := &http.Client{}
+		resp, err := client.Do(req)
+		if err != nil {
+			log.Println("resp:", resp)
+			return albumList, err
+		}
+		defer resp.Body.Close()
+
+		body, _ := io.ReadAll(resp.Body)
+
+		var artistAlbumList dto.TwonkyArtistAlbumFolder
+
+		if err := xml.Unmarshal([]byte(body), &artistAlbumList); err != nil {
+			log.Println("unmarshal:", err)
+			return albumList, err
+		}
+
+		for _, item := range artistAlbumList.Channel.Item {
+			albumList = append(albumList, item.Enclosure.Url)
+		}
 	}
 
-	for _, album := range albumUrlList {
+	return albumList, nil
+}
 
-		req, err := http.NewRequest(http.MethodGet, album, nil)
+func GetAlbumSongList(albumUrlList []string, msg *dto.ImportedSongs, ext string) ([]dto.SongExtraTable, error) {
+	songList := make([]dto.SongExtraTable, 0)
+
+	for _, albumUrl := range albumUrlList {
+
+		req, err := http.NewRequest(http.MethodGet, albumUrl, nil)
 		if err != nil {
 			return songList, err
 		}
@@ -469,19 +505,17 @@ func GetAlbumSongList(albumUrlList []string, album string, msg *dto.ImportedSong
 		}
 
 		for _, item := range albumSongList.Channel.Item {
-			if takeAll || album == item.Title {
-				entry := dto.SongExtraTable{
-					Filename:    item.Title,
-					URL:         item.Meta.Res.CharData,
-					Frequency:   item.Meta.Res.SampleFrequency,
-					Bitrate:     item.Meta.Res.Bitrate,
-					Duration:    item.Meta.Res.Duration,
-					AlbumArtURI: item.Meta.AlbumArtURI.CharData,
-				}
+			entry := dto.SongExtraTable{
+				Filename:    item.Title,
+				URL:         item.Meta.Res.CharData,
+				Frequency:   item.Meta.Res.SampleFrequency,
+				Bitrate:     item.Meta.Res.Bitrate,
+				Duration:    item.Meta.Res.Duration,
+				AlbumArtURI: item.Meta.AlbumArtURI.CharData,
+			}
 
-				if item.Meta.Extension == ext {
-					songList = append(songList, entry)
-				}
+			if item.Meta.Extension == ext {
+				songList = append(songList, entry)
 			}
 		}
 	}

@@ -57,6 +57,7 @@ func (ctrl *HTTPController) ImportSongs(w http.ResponseWriter, r *http.Request) 
 func (ctrl *HTTPController) GetSongsByTitle(w http.ResponseWriter, r *http.Request) {
 	title := ctrl.GetParam(r, "title")
 	// ctrl.Utils.GetParam()
+	enableCors(&w)
 	if title == "" {
 		ctrl.EncodeEmptyResponse(r, w, plterror.ErrBadSyntax)
 		return
@@ -67,4 +68,8 @@ func (ctrl *HTTPController) GetSongsByTitle(w http.ResponseWriter, r *http.Reque
 		return
 	}
 	ctrl.EncodeDataResponse(r, w, resp, nil)
+}
+
+func enableCors(w *http.ResponseWriter) {
+	(*w).Header().Set("Access-Control-Allow-Origin", "*")
 }

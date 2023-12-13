@@ -3,6 +3,7 @@ package database
 import (
 	"strings"
 
+	"github.com/gofrs/uuid"
 	"gorm.io/gorm"
 	"gorm.io/gorm/clause"
 	"playlistturbo.com/model"
@@ -14,6 +15,8 @@ type MusicDatabase interface {
 	SearchGenre(genre string) (uint, error)
 	SearchFilePath(filePath string) (bool, error)
 	GetSongsByTitle(title string) ([]model.Song, error)
+	GetSongsByPath(path string) ([]model.Song, error)
+	UpdateFilePath(songID uuid.UUID, path string) error
 }
 
 func (p *PostgresDB) AddSong(Song model.Song) (model.Song, error) {
@@ -61,4 +64,29 @@ func (p *PostgresDB) GetSongsByTitle(title string) ([]model.Song, error) {
 		return songs, err
 	}
 	return songs, nil
+}
+
+func (p *PostgresDB) GetSongsByPath(path string) ([]model.Song, error) {
+	var songs []model.Song
+	pathx := "%" + path + "%"
+	err := p.Gorm.Model(&songs).
+		Where("file_path like ?", pathx).
+		Find(&songs).
+		Error
+	if err != nil {
+		return songs, err
+	}
+	return songs, nil
+}
+
+func (p *PostgresDB) UpdateFilePath(songID uuid.UUID, path string) error {
+	err := p.Gorm.Model(model.Song{}).
+		Select("file_path", "twonky_link", "album_art_uri").
+		Where("id = ?", songID).
+		Updates(map[string]interface{}{"file_path": path, "twonky_link": "", "album_art_uri": ""}).
+		Error
+	if err != nil {
+		return handleError(err)
+	}
+	return nil
 }

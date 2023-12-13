@@ -14,6 +14,7 @@ type SongsController interface {
 	GetMainList(w http.ResponseWriter, r *http.Request)
 	ImportSongs(w http.ResponseWriter, r *http.Request)
 	GetSongsByTitle(w http.ResponseWriter, r *http.Request)
+	MoveSongs(w http.ResponseWriter, r *http.Request)
 }
 
 func (ctrl *HTTPController) AddSong(w http.ResponseWriter, r *http.Request) {
@@ -52,6 +53,30 @@ func (ctrl *HTTPController) ImportSongs(w http.ResponseWriter, r *http.Request) 
 	}
 
 	ctrl.EncodeDataResponse(r, w, songs, nil)
+}
+
+func (ctrl *HTTPController) MoveSongs(w http.ResponseWriter, r *http.Request) {
+	var body dto.MoveSongs
+	var ok bool
+	body, ok = ctrl.GetBody(r).(dto.MoveSongs)
+	if !ok {
+		ctrl.EncodeEmptyResponse(r, w, plterror.ErrBadSyntax)
+		return
+	}
+
+	err := utils.ValidSongExtension(body.SongExtension)
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
+	}
+
+	err = ctrl.Svc.MoveSongs(body)
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
+	}
+
+	ctrl.EncodeDataResponse(r, w, nil, nil)
 }
 
 func (ctrl *HTTPController) GetSongsByTitle(w http.ResponseWriter, r *http.Request) {

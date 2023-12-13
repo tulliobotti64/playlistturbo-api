@@ -30,6 +30,12 @@ func SongsRoutes(ctrl controller.Controller) []Route {
 			Body:    dto.ImportSongs{},
 		},
 		{
+			Path:    "/import",
+			Method:  http.MethodPut,
+			Handler: ctrl.MoveSongs,
+			Body:    dto.MoveSongs{},
+		},
+		{
 			Path:    "/{title}",
 			Method:  http.MethodGet,
 			Handler: ctrl.GetSongsByTitle,

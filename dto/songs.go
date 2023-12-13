@@ -12,6 +12,13 @@ type ImportSongs struct {
 	SongExtension string `json:"songExtension"`
 }
 
+type MoveSongs struct {
+	NewPath       string `json:"newPath"`
+	OldPath       string `json:"oldPath"`
+	Recursive     bool   `json:"recursive"`
+	SongExtension string `json:"songExtension"`
+}
+
 type SongMetadata struct {
 	Artist    string
 	Album     string

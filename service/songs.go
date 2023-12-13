@@ -3,6 +3,7 @@ package service
 import (
 	"encoding/json"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -33,6 +34,7 @@ type SongsService interface {
 	GetMainList() ([]model.Song, error)
 	ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSongs, error)
 	GetSongsByTitle(title string) ([]dto.Songs, error)
+	MoveSongs(moveSongs dto.MoveSongs) error
 }
 
 func (svc *PLTService) AddSong(Song model.Song) error {
@@ -49,6 +51,44 @@ func (svc *PLTService) GetMainList() ([]model.Song, error) {
 
 	return music, err
 }
+
+func (svc *PLTService) MoveSongs(moveInfo dto.MoveSongs) error {
+	songs, err := svc.DB.GetSongsByPath(moveInfo.OldPath)
+	if err != nil {
+		return err
+	}
+	for _, song := range songs {
+		if _, err := os.Stat(song.FilePath); errors.Is(err, os.ErrNotExist) {
+			err = svc.MoveSong(song, moveInfo)
+			if err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+func (svc *PLTService) MoveSong(song model.Song, moveInfo dto.MoveSongs) error {
+	// extractFilename(song.FilePath)
+	fileArray := strings.Split(song.FilePath, "/")
+	newFilePath := ""
+	for _, file := range fileArray {
+		if strings.Contains(file, ".mp3") {
+			newFilePath = moveInfo.NewPath + "/" + file
+			if _, err := os.Stat(newFilePath); errors.Is(err, os.ErrNotExist) {
+				return err
+			} else {
+				err := svc.DB.UpdateFilePath(song.ID, newFilePath)
+				if err != nil {
+					return err
+				}
+			}
+		}
+	}
+	return nil
+}
+
+// func (svc *PLTService) DeleteSong()
 
 // Essa funçao de Importacao de Musicas vai receber um Path pra ler os arquivos recursivamente ou nao
 // Cada um dos arquivos, se for uma extensao suportada (pegamos do arquivo de config), abrimos ele com

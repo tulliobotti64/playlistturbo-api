@@ -17,6 +17,9 @@ type MusicDatabase interface {
 	GetSongsByTitle(title string) ([]model.Song, error)
 	GetSongsByPath(path string) ([]model.Song, error)
 	UpdateFilePath(songID uuid.UUID, path string) error
+	GetEmptyTwonkyLinks() ([]model.Song, error)
+	UpdateTwonkyLinks(songID uuid.UUID, twonkyLink, albumUri string) error
+	RemoveSong(path string) error
 }
 
 func (p *PostgresDB) AddSong(Song model.Song) (model.Song, error) {
@@ -85,6 +88,40 @@ func (p *PostgresDB) UpdateFilePath(songID uuid.UUID, path string) error {
 		Where("id = ?", songID).
 		Updates(map[string]interface{}{"file_path": path, "twonky_link": "", "album_art_uri": ""}).
 		Error
+	if err != nil {
+		return handleError(err)
+	}
+	return nil
+}
+
+func (p *PostgresDB) GetEmptyTwonkyLinks() ([]model.Song, error) {
+	var songs []model.Song
+	err := p.Gorm.Model(&songs).
+		Where(`twonky_link = ''`).
+		Find(&songs).
+		Order("file_path ASC").
+		Error
+	if err != nil {
+		return songs, err
+	}
+	return songs, nil
+}
+
+func (p *PostgresDB) UpdateTwonkyLinks(songID uuid.UUID, twonkyLink, albumUri string) error {
+	err := p.Gorm.Model(model.Song{}).
+		Select("twonky_link", "album_art_uri").
+		Where("id = ?", songID).
+		Updates(map[string]interface{}{"twonky_link": twonkyLink, "album_art_uri": albumUri}).
+		Error
+	if err != nil {
+		return handleError(err)
+	}
+	return nil
+}
+
+func (p *PostgresDB) RemoveSong(path string) error {
+	path1 := "%" + strings.TrimSpace(path) + "%"
+	err := p.Gorm.Delete(&model.Song{}, "file_path like ?", path1).Error
 	if err != nil {
 		return handleError(err)
 	}

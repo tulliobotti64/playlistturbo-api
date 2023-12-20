@@ -25,7 +25,6 @@ type SongMetadata struct {
 	Title     string
 	AlbumYear uint
 	Lenght    string
-	LenghtSec float64
 	GenreID   uint
 }
 

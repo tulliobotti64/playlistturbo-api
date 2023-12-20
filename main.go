@@ -3,9 +3,11 @@ package main
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/go-co-op/gocron"
 	"playlistturbo.com/config"
 	"playlistturbo.com/controller"
 	"playlistturbo.com/jobs"
@@ -31,6 +33,10 @@ func main() {
 	if config.Config.StartupJobs {
 		sched.StartupJobs()
 	}
+	// initializes gocron "github.com/go-co-op/gocron" scheduler to update twonky links
+	s := gocron.NewScheduler(time.UTC)
+	s.Every(1).Hour().Do(ds.UpdateTwonkyLinks())
+	s.StartAsync()
 
 	// Initialize the controller
 	ctrl := controller.NewController(ds)

@@ -35,6 +35,8 @@ type SongsService interface {
 	ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSongs, error)
 	GetSongsByTitle(title string) ([]dto.Songs, error)
 	MoveSongs(moveSongs dto.MoveSongs) error
+	UpdateTwonkyLinks() ([]model.Song, error)
+	RemoveSong(importSongs dto.ImportSongs) error
 }
 
 func (svc *PLTService) AddSong(Song model.Song) error {
@@ -88,8 +90,6 @@ func (svc *PLTService) MoveSong(song model.Song, moveInfo dto.MoveSongs) error {
 	return nil
 }
 
-// func (svc *PLTService) DeleteSong()
-
 // Essa funçao de Importacao de Musicas vai receber um Path pra ler os arquivos recursivamente ou nao
 // Cada um dos arquivos, se for uma extensao suportada (pegamos do arquivo de config), abrimos ele com
 // o id3v2. Se as infos de tag mp3 forem corretas, adicionamos ele no DB
@@ -98,52 +98,7 @@ func (svc *PLTService) ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSon
 	msg.Message = "Quantidade de musicas importadas:"
 	msg.StartTime = time.Now()
 
-	//verify path
-	info, err := os.Stat(importSongs.Path)
-	if err != nil || !info.IsDir() {
-		return msg, plterror.InvalidSongPath
-	}
-
-	arrPath := strings.Split(importSongs.Path, "/")
-	if len(arrPath) < 5 {
-		return msg, plterror.InvalidSongPath
-	}
-
-	genre := arrPath[4]
-	//pegar lista dos Diretorios de Generos do Nas
-	nasGenreURL, err := GetTwonkyGenre(genre)
-	if err != nil {
-		return msg, err
-	}
-
-	artist := ""
-	if len(arrPath)-1 > 4 {
-		artist = arrPath[5]
-	}
-	nasArtistURL, err := GetTwonkyArtistFolder(nasGenreURL, artist, &msg)
-	if err != nil {
-		return msg, err
-	}
-
-	var albumLinkList []string
-	album := ""
-	if len(arrPath)-1 > 5 {
-		album = arrPath[6]
-	}
-	albumLinkList, err = GetArtistAlbumList(nasArtistURL, album, &msg)
-	if err != nil {
-		return msg, err
-	}
-
-	albumCDList, err := GetArtistAlbumCDList(albumLinkList)
-	if err != nil {
-		return msg, err
-	}
-
-	songExtraTable, err := GetAlbumSongList(albumCDList, &msg, importSongs.SongExtension)
-	if err != nil {
-		return msg, err
-	}
+	songExtraTable, err := GetSongExtraTable(importSongs)
 
 	fileList := make([]string, 0)
 	var fList = make([]string, 0)
@@ -182,7 +137,7 @@ func (svc *PLTService) ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSon
 			if err != nil {
 				fmt.Printf("error adding song: %s", song.Title)
 				fmt.Printf("error : %v\n", err)
-				return msg, nil
+				return msg, err
 			}
 			msg.SongQty++
 		}
@@ -200,6 +155,58 @@ func (svc *PLTService) ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSon
 	return msg, nil
 }
 
+func GetSongExtraTable(importSongs dto.ImportSongs) ([]dto.SongExtraTable, error) {
+	var msg dto.ImportedSongs
+	songET := []dto.SongExtraTable{}
+	// verify path
+	info, err := os.Stat(importSongs.Path)
+	if err != nil || !info.IsDir() {
+		return songET, plterror.InvalidSongPath
+	}
+
+	arrPath := strings.Split(importSongs.Path, "/")
+	if len(arrPath) < 5 {
+		return songET, plterror.InvalidSongPath
+	}
+
+	genre := arrPath[4]
+	// pegar lista dos Diretorios de Generos do Nas
+	nasGenreURL, err := GetTwonkyGenre(genre)
+	if err != nil {
+		return songET, err
+	}
+
+	artist := ""
+	if len(arrPath)-1 > 4 {
+		artist = arrPath[5]
+	}
+	nasArtistURL, err := GetTwonkyArtistFolder(nasGenreURL, artist, &msg)
+	if err != nil {
+		return songET, err
+	}
+
+	var albumLinkList []string
+	album := ""
+	if len(arrPath)-1 > 5 {
+		album = arrPath[6]
+	}
+	albumLinkList, err = GetArtistAlbumList(nasArtistURL, album, &msg)
+	if err != nil {
+		return songET, err
+	}
+
+	albumCDList, err := GetArtistAlbumCDList(albumLinkList)
+	if err != nil {
+		return songET, err
+	}
+
+	songET, err = GetAlbumSongList(albumCDList, &msg, importSongs.SongExtension)
+	if err != nil {
+		return songET, err
+	}
+	return songET, nil
+}
+
 func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtraTable) (model.Song, error) {
 	var songMp3 model.Song
 	f, err := os.Open(songPath)
@@ -209,28 +216,36 @@ func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtr
 	defer f.Close()
 
 	genreTagAux := ""
-	albumAux := "Unknonwn"
-	artistAux := "Unknonwn"
-	titleAux := "Unknonwn"
+	albumAux := "unknown"
+	artistAux := "unknown"
+	titleAux := ""
 	trackAux := 0
 	var yearAux uint = 0
 	var genreID uint = 1
 	pathSplit := strings.Split(songPath, "/")
-	pIndex := len(pathSplit) - 1
-	fname := pathSplit[pIndex]
+	fname := extractFilename(songPath)
 
 	mp3Tag, err := tag.ReadFrom(f)
 	if err != nil {
 		fmt.Printf("error reading file: %v\n", err)
 		fmt.Println("file:", songPath)
-		// return songMp3, err
 	} else {
 		genreTagAux = mp3Tag.Genre()
-		albumAux = mp3Tag.Album()
 		yearAux = uint(mp3Tag.Year())
-		artistAux = mp3Tag.Artist()
-		titleAux = mp3Tag.Title()
 		trackAux, _ = mp3Tag.Track()
+		titleAux = mp3Tag.Title()
+
+		if len(mp3Tag.Artist()) > 0 {
+			artistAux = mp3Tag.Artist()
+		} else {
+			artistAux = "unknown"
+		}
+
+		if len(mp3Tag.Album()) > 0 {
+			albumAux = mp3Tag.Album()
+		} else {
+			albumAux = "unknown"
+		}
 	}
 
 	if genreTagAux == "" {
@@ -244,9 +259,9 @@ func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtr
 		genreID = 1
 	}
 
-	// mp3Sec := utils.GetMp3Time(f)  -- it takes forever to retrieve the duration
-	// songMp3.Lenght = utils.SecondsToMinutes(int(mp3Sec))
-	// songMp3.LenghtSec = mp3Sec
+	if len(titleAux) == 0 {
+		titleAux = pathSplit[len(pathSplit)-1]
+	}
 
 	songMp3.Album = albumAux
 	songMp3.AlbumDate = yearAux
@@ -260,8 +275,6 @@ func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtr
 	songMp3.Format = "mp3"
 
 	for _, s := range songExtraTable {
-		// t := transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
-		// result, _, _ := transform.String(t, fname)
 		if s.Filename == fname {
 			songMp3.TwonkyLink = s.URL
 			songMp3.SampleFrequency = uint(s.Frequency)
@@ -327,7 +340,6 @@ func (svc *PLTService) processFlac(songPath string) (model.Song, error) {
 	songFlac.Artist = artistx
 	songFlac.GenreID = genreID
 	songFlac.Lenght = utils.SecondsToMinutes(int(flacLenght))
-	songFlac.LenghtSec = float64(flacLenght)
 	songFlac.Title = titlex
 	songFlac.UpdatedAt = time.Now()
 	songFlac.FilePath = songPath
@@ -484,6 +496,7 @@ func GetArtistAlbumList(nasArtistAlbumURL []string, oneAlbum string, msg *dto.Im
 
 	return albumList, nil
 }
+
 func GetArtistAlbumCDList(nasArtistAlbumCDURL []string) ([]string, error) {
 	var albumList []string
 
@@ -576,4 +589,82 @@ func (svc *PLTService) GetSongsByTitle(title string) ([]dto.Songs, error) {
 		songs = append(songs, song)
 	}
 	return songs, nil
+}
+
+func (svc *PLTService) UpdateTwonkyLinks() ([]model.Song, error) {
+	songs, err := svc.DB.GetEmptyTwonkyLinks()
+	if err != nil {
+		return songs, err
+	}
+
+	if len(songs) == 0 {
+		return songs, nil
+	}
+
+	var param dto.ImportSongs
+	param.Path = extractPath(songs[0].FilePath)
+	param.Recursive = true
+	if strings.Contains(songs[0].FilePath, EXT_MP3) {
+		param.SongExtension = EXT_MP3
+	}
+	if strings.Contains(songs[0].FilePath, EXT_FLAC) {
+		param.SongExtension = EXT_FLAC
+	}
+
+	var processedPath string
+	var songsET []dto.SongExtraTable
+	for _, song := range songs {
+		if extractPath(song.FilePath) != processedPath {
+			processedPath = extractPath(song.FilePath)
+			songsET, err = GetSongExtraTable(param)
+			if err != nil {
+				return songs, err
+			}
+		}
+		// get townky info from ET and update db
+		for _, songET := range songsET {
+			if extractFilename(song.FilePath) == songET.Filename {
+				svc.DB.UpdateTwonkyLinks(song.ID, songET.URL, songET.AlbumArtURI)
+				break
+			}
+		}
+	}
+
+	return songs, nil
+}
+
+func (svc *PLTService) RemoveSong(importSongs dto.ImportSongs) error {
+	split := strings.Split(importSongs.Path, "/")
+
+	id := len(split)
+	path := ""
+	for x := 1; x < id; x++ {
+		path += "/" + split[x]
+		if _, err := os.Stat(path); errors.Is(err, os.ErrNotExist) {
+			break
+		}
+	}
+
+	err := svc.DB.RemoveSong(path)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func extractPath(path string) string {
+	temp := strings.Split(path, "/")
+	var newPath string
+	for x := 1; x < len(temp)-1; x++ {
+		piece := "/" + temp[x]
+		newPath += piece
+	}
+	return newPath
+}
+
+func extractFilename(path string) string {
+	pathSplit := strings.Split(path, "/")
+	pIndex := len(pathSplit) - 1
+	fname := pathSplit[pIndex]
+	return fname
 }

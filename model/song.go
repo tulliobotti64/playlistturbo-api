@@ -15,7 +15,6 @@ type Song struct {
 	Album           string    `gorm:"not null;type:varchar(200)"`
 	Title           string    `gorm:"not null;type:varchar(200)"`
 	Lenght          string    `gorm:"lenght;type:varchar(20)"`
-	LenghtSec       float64   `gorm:"lenghtSec"`
 	AlbumDate       uint      `gorm:"not null;type:uint"`
 	FilePath        string    `gorm:"not null;type:varchar(600);uniqueIndex"`
 	TwonkyLink      string    `gorm:"not null;type:varchar(600)"`

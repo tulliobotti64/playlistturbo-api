@@ -15,6 +15,7 @@ type SongsController interface {
 	ImportSongs(w http.ResponseWriter, r *http.Request)
 	GetSongsByTitle(w http.ResponseWriter, r *http.Request)
 	MoveSongs(w http.ResponseWriter, r *http.Request)
+	RemoveSongs(w http.ResponseWriter, r *http.Request)
 }
 
 func (ctrl *HTTPController) AddSong(w http.ResponseWriter, r *http.Request) {
@@ -97,4 +98,28 @@ func (ctrl *HTTPController) GetSongsByTitle(w http.ResponseWriter, r *http.Reque
 
 func enableCors(w *http.ResponseWriter) {
 	(*w).Header().Set("Access-Control-Allow-Origin", "*")
+}
+
+func (ctrl *HTTPController) RemoveSongs(w http.ResponseWriter, r *http.Request) {
+	var body dto.ImportSongs
+	var ok bool
+	body, ok = ctrl.GetBody(r).(dto.ImportSongs)
+	if !ok {
+		ctrl.EncodeEmptyResponse(r, w, plterror.ErrBadSyntax)
+		return
+	}
+
+	err := utils.ValidSongExtension(body.SongExtension)
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
+	}
+
+	err = ctrl.Svc.RemoveSong(body)
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
+	}
+
+	ctrl.EncodeDataResponse(r, w, nil, nil)
 }

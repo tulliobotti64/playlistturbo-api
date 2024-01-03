@@ -20,6 +20,7 @@ type MusicDatabase interface {
 	GetEmptyTwonkyLinks() ([]model.Song, error)
 	UpdateTwonkyLinks(songID uuid.UUID, twonkyLink, albumUri string) error
 	RemoveSong(path string) error
+	SetFavoriteSong(id uuid.UUID) error
 }
 
 func (p *PostgresDB) AddSong(Song model.Song) (model.Song, error) {
@@ -61,6 +62,7 @@ func (p *PostgresDB) GetSongsByTitle(title string) ([]model.Song, error) {
 	titlex := "%" + title + "%"
 	err := p.Gorm.Model(&songs).
 		Where("title ilike ?", titlex).
+		Order("title ASC").
 		Find(&songs).
 		Error
 	if err != nil {
@@ -122,6 +124,28 @@ func (p *PostgresDB) UpdateTwonkyLinks(songID uuid.UUID, twonkyLink, albumUri st
 func (p *PostgresDB) RemoveSong(path string) error {
 	path1 := "%" + strings.TrimSpace(path) + "%"
 	err := p.Gorm.Delete(&model.Song{}, "file_path like ?", path1).Error
+	if err != nil {
+		return handleError(err)
+	}
+	return nil
+}
+
+func (p *PostgresDB) SetFavoriteSong(songID uuid.UUID) error {
+	var song model.Song
+	err := p.Gorm.Model(&song).
+		Where("id = ?", songID).
+		Find(&song).
+		Error
+	if err != nil {
+		return handleError(err)
+	}
+	fav := !song.Favorite
+
+	err = p.Gorm.Model(&song).
+		Select("favorite").
+		Where("id = ?", songID).
+		Updates(map[string]interface{}{"favorite": fav}).
+		Error
 	if err != nil {
 		return handleError(err)
 	}

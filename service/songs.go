@@ -17,6 +17,7 @@ import (
 	"github.com/dhowden/tag"
 	"github.com/go-flac/flacvorbis"
 	"github.com/go-flac/go-flac"
+	"github.com/gofrs/uuid"
 	"playlistturbo.com/config"
 	"playlistturbo.com/dto"
 	"playlistturbo.com/model"
@@ -37,6 +38,7 @@ type SongsService interface {
 	MoveSongs(moveSongs dto.MoveSongs) error
 	UpdateTwonkyLinks() ([]model.Song, error)
 	RemoveSong(importSongs dto.ImportSongs) error
+	SetFavoriteSong(id uuid.UUID) error
 }
 
 func (svc *PLTService) AddSong(Song model.Song) error {
@@ -652,6 +654,13 @@ func (svc *PLTService) RemoveSong(importSongs dto.ImportSongs) error {
 	return nil
 }
 
+func (svc *PLTService) SetFavoriteSong(id uuid.UUID) error {
+	err := svc.DB.SetFavoriteSong(id)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 func extractPath(path string) string {
 	temp := strings.Split(path, "/")
 	var newPath string

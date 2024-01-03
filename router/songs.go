@@ -53,5 +53,17 @@ func SongsRoutes(ctrl controller.Controller) []Route {
 				},
 			},
 		},
+		{
+			Path:    "/{id}",
+			Method:  http.MethodPut,
+			Handler: ctrl.SetFavoriteSong,
+			Body:    nil,
+			Params: middlewares.Params{
+				{
+					Name:       "id",
+					Validation: "required",
+				},
+			},
+		},
 	}
 }

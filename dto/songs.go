@@ -3,6 +3,7 @@ package dto
 import (
 	"time"
 
+	"github.com/gofrs/uuid"
 	"playlistturbo.com/model"
 )
 
@@ -48,20 +49,28 @@ type SongExtraTable struct {
 }
 
 type Songs struct {
-	Artist      string `json:"artist"`
-	Album       string `json:"album"`
-	Title       string `json:"title"`
-	TwonkyLink  string `json:"songUrl"`
-	AlbumArtURI string `json:"albumArtUri"`
+	ID          uuid.UUID `json:"id"`
+	Genre       string    `json:"genre"`
+	Artist      string    `json:"artist"`
+	Album       string    `json:"album"`
+	Title       string    `json:"title"`
+	TwonkyLink  string    `json:"songUrl"`
+	AlbumArtURI string    `json:"albumArtUri"`
+	Favorite    bool      `json:"favorite"`
+	AlbumDate   uint      `json:"albumDate"`
 }
 
 func ToDtoSongs(i model.Song, songDto Songs) Songs {
 	dto := Songs{
+		ID:          i.ID,
+		Genre:       i.GenreTag,
 		Artist:      i.Artist,
 		Album:       i.Album,
 		Title:       i.Title,
 		TwonkyLink:  i.TwonkyLink,
 		AlbumArtURI: i.AlbumArtURI,
+		Favorite:    i.Favorite,
+		AlbumDate:   i.AlbumDate,
 	}
 	return dto
 }

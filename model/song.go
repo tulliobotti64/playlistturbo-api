@@ -19,6 +19,7 @@ type Song struct {
 	FilePath        string    `gorm:"not null;type:varchar(600);uniqueIndex"`
 	TwonkyLink      string    `gorm:"not null;type:varchar(600)"`
 	Favorite        bool      `gorm:"not null;type:bool;default:false"`
+	Hide            bool      `gorm:"not null;type:bool;default:false"`
 	TrackNumber     uint      `gorm:"type:uint"`
 	Format          string    `gorm:"not null;type:varchar(60)"`
 	SampleFrequency uint      `gorm:"type:uint"`

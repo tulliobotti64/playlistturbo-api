@@ -21,6 +21,10 @@ type MusicDatabase interface {
 	UpdateTwonkyLinks(songID uuid.UUID, twonkyLink, albumUri string) error
 	RemoveSong(path string) error
 	SetFavoriteSong(id uuid.UUID) error
+	GetGenres() ([]model.Song, error)
+	GetArtistByGenre(genreID int) ([]model.Song, error)
+	GetAlbumByArtist(artist string) ([]model.Song, error)
+	GetSongsByAlbum(album string) ([]model.Song, error)
 }
 
 func (p *PostgresDB) AddSong(Song model.Song) (model.Song, error) {
@@ -150,4 +154,57 @@ func (p *PostgresDB) SetFavoriteSong(songID uuid.UUID) error {
 		return handleError(err)
 	}
 	return nil
+}
+
+func (p *PostgresDB) GetGenres() ([]model.Song, error) {
+	var songs []model.Song
+	err := p.Gorm.Model(&songs).
+		Select("genres.name, songs.genre").
+		Preload("Genre").
+		Joins("join genres on genres.id = songs.genre").
+		Group("genres.name, songs.genre").
+		Order("genres.name").
+		Find(&songs).Error
+	if err != nil {
+		return songs, handleError(err)
+	}
+	return songs, nil
+}
+
+func (p *PostgresDB) GetArtistByGenre(genreID int) ([]model.Song, error) {
+	var songs []model.Song
+	err := p.Gorm.Model(&songs).
+		Select("artist").
+		Where("genre = ?", genreID).
+		Group("artist").
+		Order("artist").
+		Find(&songs).Error
+	if err != nil {
+		return songs, handleError(err)
+	}
+	return songs, nil
+}
+func (p *PostgresDB) GetAlbumByArtist(artist string) ([]model.Song, error) {
+	var songs []model.Song
+	err := p.Gorm.Model(&songs).
+		Select("album").
+		Where("artist = ?", artist).
+		Group("album").
+		Order("album").
+		Find(&songs).Error
+	if err != nil {
+		return songs, handleError(err)
+	}
+	return songs, nil
+}
+
+func (p *PostgresDB) GetSongsByAlbum(album string) ([]model.Song, error) {
+	var songs []model.Song
+	err := p.Gorm.Model(&songs).
+		Where("album = ?", album).
+		Find(&songs).Error
+	if err != nil {
+		return songs, handleError(err)
+	}
+	return songs, nil
 }

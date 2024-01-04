@@ -74,3 +74,8 @@ func ToDtoSongs(i model.Song, songDto Songs) Songs {
 	}
 	return dto
 }
+
+type List struct {
+	ID   uint   `json:"ID"`
+	Name string `json:"Name"`
+}

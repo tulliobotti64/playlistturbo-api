@@ -39,6 +39,10 @@ type SongsService interface {
 	UpdateTwonkyLinks() ([]model.Song, error)
 	RemoveSong(importSongs dto.ImportSongs) error
 	SetFavoriteSong(id uuid.UUID) error
+	GetGenres() ([]model.Genre, error)
+	GetArtistByGenre(genreID int) ([]dto.List, error)
+	GetAlbumByArtist(artist string) ([]dto.List, error)
+	GetSongsByAlbum(album string) ([]dto.Songs, error)
 }
 
 func (svc *PLTService) AddSong(Song model.Song) error {
@@ -676,4 +680,65 @@ func extractFilename(path string) string {
 	pIndex := len(pathSplit) - 1
 	fname := pathSplit[pIndex]
 	return fname
+}
+
+func (svc *PLTService) GetGenres() ([]model.Genre, error) {
+	var genres []model.Genre
+	songs, err := svc.DB.GetGenres()
+	if err != nil {
+		return genres, err
+	}
+	for _, song := range songs {
+		var genre model.Genre
+		genre.ID = song.GenreID
+		genre.Name = song.Genre.Name
+		genres = append(genres, genre)
+	}
+	return genres, nil
+}
+
+func (svc *PLTService) GetArtistByGenre(genreID int) ([]dto.List, error) {
+	var artists []dto.List
+	songs, err := svc.DB.GetArtistByGenre(genreID)
+	if err != nil {
+		return artists, err
+	}
+	for x, song := range songs {
+		var artist dto.List
+		artist.ID = uint(x + 1)
+		artist.Name = song.Artist
+		artists = append(artists, artist)
+	}
+	return artists, nil
+}
+func (svc *PLTService) GetAlbumByArtist(artist string) ([]dto.List, error) {
+	var albums []dto.List
+	songs, err := svc.DB.GetAlbumByArtist(artist)
+	if err != nil {
+		return albums, err
+	}
+	for x, song := range songs {
+		var album dto.List
+		album.ID = uint(x + 1)
+		album.Name = song.Album
+		albums = append(albums, album)
+	}
+	return albums, nil
+}
+
+func (svc *PLTService) GetSongsByAlbum(album string) ([]dto.Songs, error) {
+	var songs []model.Song
+	var songsDto []dto.Songs
+	songs, err := svc.DB.GetSongsByAlbum(album)
+	if err != nil {
+		return songsDto, err
+	}
+
+	for _, songDB := range songs {
+		var songDto dto.Songs
+		songDto = dto.ToDtoSongs(songDB, songDto)
+		songsDto = append(songsDto, songDto)
+	}
+
+	return songsDto, nil
 }

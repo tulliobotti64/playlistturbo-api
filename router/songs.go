@@ -65,5 +65,47 @@ func SongsRoutes(ctrl controller.Controller) []Route {
 				},
 			},
 		},
+		{
+			Path:    "/genres",
+			Method:  http.MethodGet,
+			Handler: ctrl.GetGenres,
+			Body:    nil,
+		},
+		{
+			Path:    "/artistbygenre/{id}",
+			Method:  http.MethodGet,
+			Handler: ctrl.GetArtistByGenre,
+			Body:    nil,
+			Params: middlewares.Params{
+				{
+					Name:       "id",
+					Validation: "required",
+				},
+			},
+		},
+		{
+			Path:    "/albumbyartist/{id}",
+			Method:  http.MethodGet,
+			Handler: ctrl.GetAlbumByArtist,
+			Body:    nil,
+			Params: middlewares.Params{
+				{
+					Name:       "id",
+					Validation: "required",
+				},
+			},
+		},
+		{
+			Path:    "/songsbyalbum/{id}",
+			Method:  http.MethodGet,
+			Handler: ctrl.GetSongsByAlbum,
+			Body:    nil,
+			Params: middlewares.Params{
+				{
+					Name:       "id",
+					Validation: "required",
+				},
+			},
+		},
 	}
 }

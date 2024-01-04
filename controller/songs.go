@@ -17,6 +17,10 @@ type SongsController interface {
 	MoveSongs(w http.ResponseWriter, r *http.Request)
 	RemoveSongs(w http.ResponseWriter, r *http.Request)
 	SetFavoriteSong(w http.ResponseWriter, r *http.Request)
+	GetGenres(w http.ResponseWriter, r *http.Request)
+	GetArtistByGenre(w http.ResponseWriter, r *http.Request)
+	GetAlbumByArtist(w http.ResponseWriter, r *http.Request)
+	GetSongsByAlbum(w http.ResponseWriter, r *http.Request)
 }
 
 func (ctrl *HTTPController) AddSong(w http.ResponseWriter, r *http.Request) {
@@ -129,4 +133,59 @@ func (ctrl *HTTPController) SetFavoriteSong(w http.ResponseWriter, r *http.Reque
 	}
 
 	ctrl.EncodeDataResponse(r, w, id, nil)
+}
+
+func (ctrl *HTTPController) GetGenres(w http.ResponseWriter, r *http.Request) {
+	genres, err := ctrl.Svc.GetGenres()
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
+	}
+
+	ctrl.EncodeDataResponse(r, w, genres, nil)
+}
+
+func (ctrl *HTTPController) GetArtistByGenre(w http.ResponseWriter, r *http.Request) {
+	genreID := ctrl.GetParamInt(r, "id")
+
+	if genreID == 0 {
+		ctrl.EncodeEmptyResponse(r, w, plterror.ErrBadSyntax)
+		return
+	}
+	resp, err := ctrl.Svc.GetArtistByGenre(genreID)
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
+	}
+	ctrl.EncodeDataResponse(r, w, resp, nil)
+}
+
+func (ctrl *HTTPController) GetAlbumByArtist(w http.ResponseWriter, r *http.Request) {
+	artist := ctrl.GetParam(r, "id")
+
+	if artist == "" {
+		ctrl.EncodeEmptyResponse(r, w, plterror.ErrBadSyntax)
+		return
+	}
+	resp, err := ctrl.Svc.GetAlbumByArtist(artist)
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
+	}
+	ctrl.EncodeDataResponse(r, w, resp, nil)
+}
+
+func (ctrl *HTTPController) GetSongsByAlbum(w http.ResponseWriter, r *http.Request) {
+	album := ctrl.GetParam(r, "id")
+
+	if album == "" {
+		ctrl.EncodeEmptyResponse(r, w, plterror.ErrBadSyntax)
+		return
+	}
+	resp, err := ctrl.Svc.GetSongsByAlbum(album)
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
+	}
+	ctrl.EncodeDataResponse(r, w, resp, nil)
 }

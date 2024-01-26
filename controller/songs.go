@@ -87,12 +87,13 @@ func (ctrl *HTTPController) MoveSongs(w http.ResponseWriter, r *http.Request) {
 
 func (ctrl *HTTPController) GetSongsByTitle(w http.ResponseWriter, r *http.Request) {
 	title := ctrl.GetParam(r, "title")
-
 	if title == "" {
 		ctrl.EncodeEmptyResponse(r, w, plterror.ErrBadSyntax)
 		return
 	}
-	resp, err := ctrl.Svc.GetSongsByTitle(title)
+	limit := ctrl.GetParamInt(r, "limit")
+
+	resp, err := ctrl.Svc.GetSongsByTitle(title, limit)
 	if err != nil {
 		ctrl.EncodeEmptyResponse(r, w, err)
 		return
@@ -177,12 +178,14 @@ func (ctrl *HTTPController) GetAlbumByArtist(w http.ResponseWriter, r *http.Requ
 
 func (ctrl *HTTPController) GetSongsByAlbum(w http.ResponseWriter, r *http.Request) {
 	album := ctrl.GetParam(r, "id")
-
 	if album == "" {
 		ctrl.EncodeEmptyResponse(r, w, plterror.ErrBadSyntax)
 		return
 	}
-	resp, err := ctrl.Svc.GetSongsByAlbum(album)
+
+	limit := ctrl.GetParamInt(r, "limit")
+
+	resp, err := ctrl.Svc.GetSongsByAlbum(album, limit)
 	if err != nil {
 		ctrl.EncodeEmptyResponse(r, w, err)
 		return

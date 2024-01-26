@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"net/url"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -34,7 +35,7 @@ type SongsService interface {
 	AddSong(model.Song) error
 	GetMainList() ([]model.Song, error)
 	ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSongs, error)
-	GetSongsByTitle(title string) ([]dto.Songs, error)
+	GetSongsByTitle(title string, limit int) ([]dto.Songs, error)
 	MoveSongs(moveSongs dto.MoveSongs) error
 	UpdateTwonkyLinks() ([]model.Song, error)
 	RemoveSong(importSongs dto.ImportSongs) error
@@ -42,7 +43,7 @@ type SongsService interface {
 	GetGenres() ([]model.Genre, error)
 	GetArtistByGenre(genreID int) ([]dto.List, error)
 	GetAlbumByArtist(artist string) ([]dto.List, error)
-	GetSongsByAlbum(album string) ([]dto.Songs, error)
+	GetSongsByAlbum(album string, limit int) ([]dto.Songs, error)
 }
 
 func (svc *PLTService) AddSong(Song model.Song) error {
@@ -96,9 +97,6 @@ func (svc *PLTService) MoveSong(song model.Song, moveInfo dto.MoveSongs) error {
 	return nil
 }
 
-// Essa funçao de Importacao de Musicas vai receber um Path pra ler os arquivos recursivamente ou nao
-// Cada um dos arquivos, se for uma extensao suportada (pegamos do arquivo de config), abrimos ele com
-// o id3v2. Se as infos de tag mp3 forem corretas, adicionamos ele no DB
 func (svc *PLTService) ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSongs, error) {
 	var msg dto.ImportedSongs
 	msg.Message = "Quantidade de musicas importadas:"
@@ -120,7 +118,7 @@ func (svc *PLTService) ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSon
 		var err error
 		if strings.Contains(songPath, "mp3") {
 			// songTitle := strings.Split(songPath, "/")
-			song, err = svc.processMp3(songPath, songExtraTable)
+			song, err = svc.processMp3(songPath, songExtraTable, importSongs.GenreFromPath)
 			if err != nil {
 				return msg, err
 			}
@@ -213,7 +211,7 @@ func GetSongExtraTable(importSongs dto.ImportSongs) ([]dto.SongExtraTable, error
 	return songET, nil
 }
 
-func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtraTable) (model.Song, error) {
+func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtraTable, genreFromPath bool) (model.Song, error) {
 	var songMp3 model.Song
 	f, err := os.Open(songPath)
 	if err != nil {
@@ -253,8 +251,7 @@ func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtr
 			albumAux = "unknown"
 		}
 	}
-
-	if genreTagAux == "" {
+	if genreFromPath || genreTagAux == "" {
 		genreTagAux = pathSplit[4]
 	}
 	genreID, err = svc.DB.SearchGenre(genreTagAux)
@@ -582,9 +579,9 @@ func GetAlbumSongList(albumUrlList []string, msg *dto.ImportedSongs, ext string)
 	return songList, nil
 }
 
-func (svc *PLTService) GetSongsByTitle(title string) ([]dto.Songs, error) {
+func (svc *PLTService) GetSongsByTitle(title string, limit int) ([]dto.Songs, error) {
 	var songs []dto.Songs
-	songsDB, err := svc.DB.GetSongsByTitle(title)
+	songsDB, err := svc.DB.GetSongsByTitle(title, limit)
 	if err != nil {
 		return songs, err
 	}
@@ -726,10 +723,11 @@ func (svc *PLTService) GetAlbumByArtist(artist string) ([]dto.List, error) {
 	return albums, nil
 }
 
-func (svc *PLTService) GetSongsByAlbum(album string) ([]dto.Songs, error) {
+func (svc *PLTService) GetSongsByAlbum(album string, limit int) ([]dto.Songs, error) {
 	var songs []model.Song
 	var songsDto []dto.Songs
-	songs, err := svc.DB.GetSongsByAlbum(album)
+	albumDecoded, err := url.QueryUnescape(album)
+	songs, err = svc.DB.GetSongsByAlbum(albumDecoded, limit)
 	if err != nil {
 		return songsDto, err
 	}

@@ -51,6 +51,10 @@ func SongsRoutes(ctrl controller.Controller) []Route {
 					Name:       "title",
 					Validation: "required",
 				},
+				{
+					Name:       "limit",
+					Validation: "required",
+				},
 			},
 		},
 		{
@@ -103,6 +107,10 @@ func SongsRoutes(ctrl controller.Controller) []Route {
 			Params: middlewares.Params{
 				{
 					Name:       "id",
+					Validation: "required",
+				},
+				{
+					Name:       "limit",
 					Validation: "required",
 				},
 			},

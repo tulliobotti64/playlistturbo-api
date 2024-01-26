@@ -11,6 +11,7 @@ type ImportSongs struct {
 	Path          string `json:"path"`
 	Recursive     bool   `json:"recursive"`
 	SongExtension string `json:"songExtension"`
+	GenreFromPath bool   `json:"genreFromPath"`
 }
 
 type MoveSongs struct {

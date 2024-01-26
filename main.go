@@ -36,7 +36,7 @@ func main() {
 	}
 	// initializes gocron "github.com/go-co-op/gocron" scheduler to update twonky links
 	s := gocron.NewScheduler(time.UTC)
-	s.Every(1).Hour().Do(ds.UpdateTwonkyLinks())
+	s.Every(1).Minute().Do(ds.UpdateTwonkyLinks())
 	s.StartAsync()
 
 	// Initialize the controller

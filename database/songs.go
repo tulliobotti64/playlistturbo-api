@@ -14,7 +14,7 @@ type MusicDatabase interface {
 	GetMainList() ([]model.Song, error)
 	SearchGenre(genre string) (uint, error)
 	SearchFilePath(filePath string) (bool, error)
-	GetSongsByTitle(title string) ([]model.Song, error)
+	GetSongsByTitle(title string, limit int) ([]model.Song, error)
 	GetSongsByPath(path string) ([]model.Song, error)
 	UpdateFilePath(songID uuid.UUID, path string) error
 	GetEmptyTwonkyLinks() ([]model.Song, error)
@@ -24,7 +24,7 @@ type MusicDatabase interface {
 	GetGenres() ([]model.Song, error)
 	GetArtistByGenre(genreID int) ([]model.Song, error)
 	GetAlbumByArtist(artist string) ([]model.Song, error)
-	GetSongsByAlbum(album string) ([]model.Song, error)
+	GetSongsByAlbum(album string, limit int) ([]model.Song, error)
 }
 
 func (p *PostgresDB) AddSong(Song model.Song) (model.Song, error) {
@@ -61,14 +61,24 @@ func (p *PostgresDB) SearchFilePath(filePath string) (bool, error) {
 	}
 	return exist, nil
 }
-func (p *PostgresDB) GetSongsByTitle(title string) ([]model.Song, error) {
+func (p *PostgresDB) GetSongsByTitle(title string, limit int) ([]model.Song, error) {
 	var songs []model.Song
+	var err error
 	titlex := "%" + title + "%"
-	err := p.Gorm.Model(&songs).
-		Where("title ilike ?", titlex).
-		Order("title ASC").
-		Find(&songs).
-		Error
+	if limit == 0 {
+		err = p.Gorm.Model(&songs).
+			Where("title ilike ?", titlex).
+			Order("title ASC").
+			Find(&songs).
+			Error
+	} else {
+		err = p.Gorm.Model(&songs).
+			Where("title ilike ?", titlex).
+			Order("title ASC").
+			Limit(limit).
+			Find(&songs).
+			Error
+	}
 	if err != nil {
 		return songs, err
 	}
@@ -198,11 +208,19 @@ func (p *PostgresDB) GetAlbumByArtist(artist string) ([]model.Song, error) {
 	return songs, nil
 }
 
-func (p *PostgresDB) GetSongsByAlbum(album string) ([]model.Song, error) {
+func (p *PostgresDB) GetSongsByAlbum(album string, limit int) ([]model.Song, error) {
 	var songs []model.Song
-	err := p.Gorm.Model(&songs).
-		Where("album = ?", album).
-		Find(&songs).Error
+	var err error
+	if limit == 0 {
+		err = p.Gorm.Model(&songs).
+			Where("album = ?", album).
+			Find(&songs).Error
+	} else {
+		err = p.Gorm.Model(&songs).
+			Where("album = ?", album).
+			Limit(limit).
+			Find(&songs).Error
+	}
 	if err != nil {
 		return songs, handleError(err)
 	}

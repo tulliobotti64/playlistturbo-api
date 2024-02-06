@@ -4,9 +4,13 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"unicode"
 
 	"github.com/dhowden/tag"
 	"github.com/tcolgate/mp3"
+	"golang.org/x/text/runes"
+	"golang.org/x/text/transform"
+	"golang.org/x/text/unicode/norm"
 	"playlistturbo.com/config"
 	"playlistturbo.com/plterror"
 )
@@ -87,4 +91,10 @@ func ValidSongExtension(extension string) error {
 		}
 	}
 	return plterror.InvalidExtension
+}
+
+func RemoveAccent(word string) string {
+	t := transform.Chain(norm.NFD, runes.Remove(runes.In(unicode.Mn)), norm.NFC)
+	result, _, _ := transform.String(t, word)
+	return result
 }

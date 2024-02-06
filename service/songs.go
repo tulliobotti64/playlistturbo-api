@@ -237,18 +237,18 @@ func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtr
 		genreTagAux = mp3Tag.Genre()
 		yearAux = uint(mp3Tag.Year())
 		trackAux, _ = mp3Tag.Track()
-		titleAux = mp3Tag.Title()
+		titleAux = utils.RemoveAccent(mp3Tag.Title())
 
 		if len(mp3Tag.Artist()) > 0 {
-			artistAux = mp3Tag.Artist()
+			artistAux = utils.RemoveAccent(mp3Tag.Artist()) // tratar campo com acento
 		} else {
-			artistAux = "unknown"
+			artistAux = pathSplit[5]
 		}
 
 		if len(mp3Tag.Album()) > 0 {
-			albumAux = mp3Tag.Album()
+			albumAux = utils.RemoveAccent(mp3Tag.Album()) //*
 		} else {
-			albumAux = "unknown"
+			albumAux = pathSplit[6]
 		}
 	}
 	if genreFromPath || genreTagAux == "" {
@@ -273,7 +273,7 @@ func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtr
 	songMp3.GenreTag = genreTagAux
 	songMp3.Title = titleAux
 	songMp3.UpdatedAt = time.Now()
-	songMp3.FilePath = songPath
+	songMp3.FilePath = utils.RemoveAccent(songPath) //*
 	songMp3.TrackNumber = uint(trackAux)
 	songMp3.Format = "mp3"
 

@@ -1,0 +1,27 @@
+# config
+config.json
+
+# Default ignored files
+/.idea/workspace.xml
+.vscode/
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+.coverage.out
+.coverage_unit.out
+
+mocks/
+
+# swagger
+./docs
+docs.go
+docs/*
+
+__debug_bin
+pltapi
+playlistturbo
+*.sh

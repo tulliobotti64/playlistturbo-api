@@ -26,6 +26,7 @@ type MusicDatabase interface {
 	GetAlbumByArtist(artist string) ([]model.Song, error)
 	GetSongsByAlbum(album string, limit int) ([]model.Song, error)
 	GetFavorites(album, artist string) ([]model.Song, error)
+	RemoveSongFolder(path string) error
 }
 
 func (p *PostgresDB) AddSong(Song model.Song) (model.Song, error) {
@@ -153,12 +154,19 @@ func (p *PostgresDB) UpdateTwonkyLinks(songID uuid.UUID, twonkyLink, albumUri st
 }
 
 func (p *PostgresDB) RemoveSong(path string) error {
-	// path1 := "%" + strings.TrimSpace(path) + "%"
 	err := p.Gorm.Delete(&model.Song{}, "file_path = ?", path).Error
 	if err != nil {
 		return handleError(err)
 	}
 	return nil
+}
+
+func (p *PostgresDB) RemoveSongFolder(path string) error {
+	var song model.Song
+	pathPerc := "%" + path + "%"
+	err := p.Gorm.Table("songs").Where("file_path like ?", pathPerc).
+		Delete(&song).Error
+	return handleError(err)
 }
 
 func (p *PostgresDB) SetFavoriteSong(songID uuid.UUID) error {

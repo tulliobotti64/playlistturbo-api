@@ -645,15 +645,21 @@ func (svc *PLTService) UpdateTwonkyLinks() ([]model.Song, error) {
 func (svc *PLTService) RemoveSong(importSongs dto.ImportSongs) error {
 	split := strings.Split(importSongs.Path, "/")
 	pathSize := len(split)
-	log.Println("remove song with path:", importSongs.Path)
 
-	if pathSize < 5 || !strings.Contains(importSongs.Path, ".mp3") {
+	if pathSize < 5 {
 		return plterror.InvalidSongPath
 	}
 
-	err := svc.DB.RemoveSong(importSongs.Path)
-	if err != nil {
-		return err
+	if strings.Contains(importSongs.Path, ".mp3") {
+		err := svc.DB.RemoveSong(importSongs.Path)
+		if err != nil {
+			return err
+		}
+	} else {
+		err := svc.DB.RemoveSongFolder(importSongs.Path)
+		if err != nil {
+			return err
+		}
 	}
 	return nil
 }

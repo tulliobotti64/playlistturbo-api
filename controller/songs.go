@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"log"
 	"net/http"
 
 	"playlistturbo.com/dto"
@@ -42,13 +41,16 @@ func (ctrl *HTTPController) GetMainList(w http.ResponseWriter, r *http.Request) 
 func (ctrl *HTTPController) ImportSongs(w http.ResponseWriter, r *http.Request) {
 	var body dto.ImportSongs
 	var ok bool
-	log.Println("entrou no controller")
 	body, ok = ctrl.GetBody(r).(dto.ImportSongs)
 	if !ok {
 		ctrl.EncodeEmptyResponse(r, w, plterror.ErrBadSyntax)
 		return
 	}
 
+	if !utils.ValidateGAA(body.GenreArtistAlbum) {
+		ctrl.EncodeEmptyResponse(r, w, plterror.InvalidGAA)
+		return
+	}
 	err := utils.ValidSongExtension(body.SongExtension)
 	if err != nil {
 		ctrl.EncodeEmptyResponse(r, w, err)

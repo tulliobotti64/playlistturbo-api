@@ -98,7 +98,7 @@ func (svc *PLTService) ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSon
 		var err error
 		if strings.Contains(songPath, "mp3") {
 			// songTitle := strings.Split(songPath, "/")
-			song, err = svc.processMp3(songPath, songExtraTable, importSongs.GenreFromPath)
+			song, err = svc.processMp3(songPath, songExtraTable, importSongs.GenreFromPath, importSongs.GenreArtistAlbum)
 			if err != nil {
 				fmt.Println("error returning from processMp3:", err)
 				return msg, err
@@ -201,7 +201,7 @@ func GetSongExtraTable(importSongs dto.ImportSongs) ([]dto.SongExtraTable, error
 	return songET, nil
 }
 
-func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtraTable, genreFromPath bool) (model.Song, error) {
+func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtraTable, genreFromPath bool, gaa string) (model.Song, error) {
 	var songMp3 model.Song
 	f, err := os.Open(songPath)
 	if err != nil {
@@ -229,13 +229,17 @@ func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtr
 		trackAux, _ = mp3Tag.Track()
 		titleAux = utils.RemoveAccent(mp3Tag.Title())
 
-		if len(mp3Tag.Artist()) > 0 {
+		if len(mp3Tag.Artist()) > 0 && gaa == "mp3tag" {
 			artistAux = utils.RemoveAccent(mp3Tag.Artist()) // tratar campo com acento
 		}
 
-		if len(mp3Tag.Album()) > 0 {
+		if len(mp3Tag.Album()) > 0 && gaa == "mp3tag" {
 			albumAux = utils.RemoveAccent(mp3Tag.Album()) //*
 			albumAux = utils.ExtractAlbumName(albumAux)
+		}
+		if gaa == "folder" {
+			albumAux = utils.ExtractAlbumName(pathSplit[6])
+			artistAux = pathSplit[5]
 		}
 	}
 
@@ -613,6 +617,7 @@ func (svc *PLTService) UpdateTwonkyLinks() ([]model.Song, error) {
 	var param dto.ImportSongs
 	param.Path = utils.ExtractPath(songs[0].FilePath)
 	param.Recursive = true
+	param.GenreArtistAlbum = "folder"
 	if strings.Contains(songs[0].FilePath, EXT_MP3) {
 		param.SongExtension = EXT_MP3
 	}
@@ -627,6 +632,7 @@ func (svc *PLTService) UpdateTwonkyLinks() ([]model.Song, error) {
 			processedPath = utils.ExtractPath(song.FilePath)
 			songsET, err = GetSongExtraTable(param)
 			if err != nil {
+				log.Println("error Updating twonky links")
 				return songs, err
 			}
 		}

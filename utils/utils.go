@@ -168,3 +168,10 @@ func ExtractTitle(s string) string {
 	}
 	return title
 }
+
+func ValidateGAA(s string) bool {
+	if s == "mp3tag" || s == "folder" {
+		return true
+	}
+	return false
+}

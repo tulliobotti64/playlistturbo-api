@@ -8,10 +8,11 @@ import (
 )
 
 type ImportSongs struct {
-	Path          string `json:"path"`
-	Recursive     bool   `json:"recursive"`
-	SongExtension string `json:"songExtension"`
-	GenreFromPath bool   `json:"genreFromPath"`
+	Path             string `json:"path"`
+	Recursive        bool   `json:"recursive"`
+	SongExtension    string `json:"songExtension"`
+	GenreFromPath    bool   `json:"genreFromPath"`
+	GenreArtistAlbum string `json:"genreArtistAlbum"`
 }
 
 type MoveSongs struct {

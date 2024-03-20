@@ -11,3 +11,4 @@ var InvalidGenre = &PLTError{message: "ERR_INVALID_GENRE", status: http.StatusBa
 var Tabelavazia = &PLTError{message: "ERR_TABELA_VAZIA", status: http.StatusBadRequest}
 var ErrDLNAAccess = &PLTError{message: "ERR_DLNA_NOT_RESPONDING", status: http.StatusInternalServerError}
 var InvalidArtist = &PLTError{message: "ERR_INVALID_ARTIST", status: http.StatusBadRequest}
+var InvalidGAA = &PLTError{message: "ERR_INVALID_GAA", status: http.StatusBadRequest}

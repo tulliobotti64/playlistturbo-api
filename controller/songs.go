@@ -22,6 +22,7 @@ type SongsController interface {
 	GetAlbumByArtist(w http.ResponseWriter, r *http.Request)
 	GetSongsByAlbum(w http.ResponseWriter, r *http.Request)
 	GetFavorites(w http.ResponseWriter, r *http.Request)
+	SetHideSong(w http.ResponseWriter, r *http.Request)
 }
 
 func (ctrl *HTTPController) AddSong(w http.ResponseWriter, r *http.Request) {
@@ -214,4 +215,15 @@ func (ctrl *HTTPController) GetFavorites(w http.ResponseWriter, r *http.Request)
 		return
 	}
 	ctrl.EncodeDataResponse(r, w, resp, nil)
+}
+
+func (ctrl *HTTPController) SetHideSong(w http.ResponseWriter, r *http.Request) {
+	id := ctrl.GetParamUUID(r, "id")
+	err := ctrl.Svc.SetHideSong(id)
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
+	}
+
+	ctrl.EncodeDataResponse(r, w, id, nil)
 }

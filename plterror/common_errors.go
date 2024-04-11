@@ -12,3 +12,4 @@ var Tabelavazia = &PLTError{message: "ERR_TABELA_VAZIA", status: http.StatusBadR
 var ErrDLNAAccess = &PLTError{message: "ERR_DLNA_NOT_RESPONDING", status: http.StatusInternalServerError}
 var InvalidArtist = &PLTError{message: "ERR_INVALID_ARTIST", status: http.StatusBadRequest}
 var InvalidGAA = &PLTError{message: "ERR_INVALID_GAA", status: http.StatusBadRequest}
+var SongIsFavorite = &PLTError{message: "ERR_SONG_IS_FAVORITE", status: http.StatusConflict}

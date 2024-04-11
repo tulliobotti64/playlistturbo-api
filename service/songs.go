@@ -45,6 +45,7 @@ type SongsService interface {
 	GetAlbumByArtist(artist string) ([]dto.List, error)
 	GetSongsByAlbum(album string, limit int) ([]dto.Songs, error)
 	GetFavorites(genre, artist string) ([]dto.Songs, error)
+	SetHideSong(id uuid.UUID) error
 }
 
 func (svc *PLTService) AddSong(Song model.Song) error {
@@ -760,4 +761,20 @@ func (svc *PLTService) GetFavorites(genre, artist string) ([]dto.Songs, error) {
 	}
 
 	return songsDto, nil
+}
+
+func (svc *PLTService) SetHideSong(id uuid.UUID) error {
+	song, err := svc.DB.GetSongByID(id)
+	if err != nil {
+		return err
+	}
+	if song.Favorite {
+		return plterror.SongIsFavorite
+	} else {
+		err = svc.DB.SetHideSong(id)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
 }

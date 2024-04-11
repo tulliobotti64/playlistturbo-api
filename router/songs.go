@@ -62,7 +62,7 @@ func SongsRoutes(ctrl controller.Controller) []Route {
 			},
 		},
 		{
-			Path:    "/{id}",
+			Path:    "/favorite/{id}",
 			Method:  http.MethodPut,
 			Handler: ctrl.SetFavoriteSong,
 			Body:    nil,
@@ -124,6 +124,18 @@ func SongsRoutes(ctrl controller.Controller) []Route {
 			Method:  http.MethodPost,
 			Handler: ctrl.GetFavorites,
 			Body:    dto.Favorites{},
+		},
+		{
+			Path:    "/hide/{id}",
+			Method:  http.MethodPut,
+			Handler: ctrl.SetHideSong,
+			Body:    nil,
+			Params: middlewares.Params{
+				{
+					Name:       "id",
+					Validation: "required",
+				},
+			},
 		},
 	}
 }

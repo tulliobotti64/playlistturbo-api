@@ -27,6 +27,8 @@ type MusicDatabase interface {
 	GetSongsByAlbum(album string, limit int) ([]model.Song, error)
 	GetFavorites(album, artist string) ([]model.Song, error)
 	RemoveSongFolder(path string) error
+	SetHideSong(id uuid.UUID) error
+	GetSongByID(songID uuid.UUID) (model.Song, error)
 }
 
 func (p *PostgresDB) AddSong(Song model.Song) (model.Song, error) {
@@ -270,4 +272,31 @@ func (p *PostgresDB) GetFavorites(genre, artist string) ([]model.Song, error) {
 		return songs, handleError(err)
 	}
 	return songs, nil
+}
+
+func (p *PostgresDB) SetHideSong(songID uuid.UUID) error {
+	var song model.Song
+
+	err := p.Gorm.Model(&song).
+		Select("hide").
+		Where("id = ?", songID).
+		Updates(map[string]interface{}{"hide": true}).
+		Error
+	if err != nil {
+		return handleError(err)
+	}
+	return nil
+}
+
+func (p *PostgresDB) GetSongByID(songID uuid.UUID) (model.Song, error) {
+	var song model.Song
+	err := p.Gorm.Model(&song).
+		Where("id = ?", songID).
+		Find(&song).
+		Error
+	if err != nil {
+		return song, handleError(err)
+	}
+
+	return song, nil
 }

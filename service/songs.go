@@ -81,14 +81,24 @@ func (svc *PLTService) ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSon
 	msg.Message = "Quantidade de musicas importadas:"
 	msg.StartTime = time.Now()
 
+	// verify path
+	if _, err := os.Stat(importSongs.Path); os.IsNotExist(err) {
+		log.Println("error reading dir:", err, importSongs.Path)
+		return msg, plterror.InvalidSongPath
+	}
+
 	songExtraTable, err := GetSongExtraTable(importSongs)
+	if err != nil {
+		log.Println("error importing songs:", err)
+		return msg, err
+	}
 
 	fileList := make([]string, 0)
 	var fList = make([]string, 0)
 	extension := "*." + importSongs.SongExtension
 	fList, err = svc.WalkMatch(importSongs.Path, extension, importSongs.Recursive)
 	if err != nil {
-		fmt.Println("error on Walkmatch:", err)
+		log.Println("error on Walkmatch:", err)
 		return msg, err
 	}
 	fileList = append(fileList, fList...)
@@ -100,7 +110,7 @@ func (svc *PLTService) ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSon
 			// songTitle := strings.Split(songPath, "/")
 			song, err = svc.processMp3(songPath, songExtraTable, importSongs.GenreFromPath, importSongs.GenreArtistAlbum)
 			if err != nil {
-				fmt.Println("error returning from processMp3:", err)
+				log.Println("error returning from processMp3:", err)
 				return msg, err
 			}
 		}
@@ -108,22 +118,22 @@ func (svc *PLTService) ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSon
 		if strings.Contains(songPath, "flac") {
 			song, err = svc.processFlac(songPath)
 			if err != nil {
-				fmt.Println("error returning from processFlac:", err)
+				log.Println("error returning from processFlac:", err)
 				return msg, err
 			}
 		}
 
 		exist, err := svc.DB.SearchFilePath(songPath)
 		if err != nil {
-			fmt.Println("error returning from SearchingFIlePath:", err)
+			log.Println("error returning from SearchingFIlePath:", err)
 			return msg, err
 		}
 
 		if !exist {
 			_, err = svc.DB.AddSong(song)
 			if err != nil {
-				fmt.Printf("error adding song: %s", song.Title)
-				fmt.Printf("error : %v\n", err)
+				log.Printf("error adding song: %s", song.Title)
+				log.Printf("error : %v\n", err)
 				return msg, err
 			}
 			msg.SongQty++
@@ -145,12 +155,6 @@ func (svc *PLTService) ImportSongs(importSongs dto.ImportSongs) (dto.ImportedSon
 func GetSongExtraTable(importSongs dto.ImportSongs) ([]dto.SongExtraTable, error) {
 	var msg dto.ImportedSongs
 	songET := []dto.SongExtraTable{}
-	// verify path
-	info, err := os.Stat(importSongs.Path)
-	if err != nil || !info.IsDir() {
-		log.Println("error reading dir:", err, importSongs)
-		return songET, plterror.InvalidSongPath
-	}
 
 	arrPath := strings.Split(importSongs.Path, "/")
 	if len(arrPath) < 5 {
@@ -222,7 +226,7 @@ func (svc *PLTService) processMp3(songPath string, songExtraTable []dto.SongExtr
 	mp3Tag, err := tag.ReadFrom(f)
 	if err != nil {
 		log.Printf("error reading file: %v\n", err)
-		fmt.Println("file:", songPath)
+		log.Println("file:", songPath)
 	} else {
 		genreTagAux = mp3Tag.Genre()
 		yearAux = uint(mp3Tag.Year())
@@ -456,7 +460,7 @@ func GetTwonkyArtistFolder(urlArtist, artist string, msg *dto.ImportedSongs) ([]
 	}
 
 	for _, item := range artistFolder.Channel.Item {
-		if takeAll || artist == item.Title {
+		if takeAll || strings.ToLower(artist) == strings.ToLower(item.Title) {
 			url = append(url, item.Enclosure.Url)
 			msg.ArtistQty++
 		}
@@ -501,7 +505,7 @@ func GetArtistAlbumList(nasArtistAlbumURL []string, oneAlbum string, msg *dto.Im
 		}
 
 		for _, item := range artistAlbumList.Channel.Item {
-			if takeAll || oneAlbum == item.Title {
+			if takeAll || strings.ToLower(oneAlbum) == strings.ToLower(item.Title) {
 				albumList = append(albumList, item.Enclosure.Url)
 			}
 		}

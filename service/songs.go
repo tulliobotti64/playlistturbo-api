@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"math/rand"
 	"net/http"
 	"net/url"
 	"os"
@@ -46,6 +47,7 @@ type SongsService interface {
 	GetSongsByAlbum(album string, limit int) ([]dto.Songs, error)
 	GetFavorites(genre, artist string) ([]dto.Songs, error)
 	SetHideSong(id uuid.UUID) error
+	GetSongsByArtist(artist, option string, limit int) ([]dto.Songs, error)
 }
 
 func (svc *PLTService) AddSong(Song model.Song) error {
@@ -607,6 +609,35 @@ func (svc *PLTService) GetSongsByTitle(title string, limit int, getHide bool) ([
 		songs = append(songs, song)
 	}
 	return songs, nil
+}
+
+func (svc *PLTService) GetSongsByArtist(artist, option string, limit int) ([]dto.Songs, error) {
+	var songs []dto.Songs
+	songsDB, err := svc.DB.GetSongsByArtist(artist, limit)
+	if err != nil {
+		return songs, err
+	}
+
+	//Random slice
+	if option == "random" {
+		songsDB = randomSlice(songsDB)
+	}
+
+	for i := 0; i < limit; i++ {
+		var song dto.Songs
+		song = dto.ToDtoSongs(songsDB[i], song)
+		songs = append(songs, song)
+	}
+
+	return songs, nil
+}
+
+func randomSlice(songsDB []model.Song) []model.Song {
+	for i := range songsDB {
+		j := rand.Intn(i + 1)
+		songsDB[i], songsDB[j] = songsDB[j], songsDB[i]
+	}
+	return songsDB
 }
 
 func (svc *PLTService) UpdateTwonkyLinks() ([]model.Song, error) {

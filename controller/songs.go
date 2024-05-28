@@ -23,6 +23,7 @@ type SongsController interface {
 	GetSongsByAlbum(w http.ResponseWriter, r *http.Request)
 	GetFavorites(w http.ResponseWriter, r *http.Request)
 	SetHideSong(w http.ResponseWriter, r *http.Request)
+	GetSongsByArtist(w http.ResponseWriter, r *http.Request)
 }
 
 func (ctrl *HTTPController) AddSong(w http.ResponseWriter, r *http.Request) {
@@ -226,4 +227,26 @@ func (ctrl *HTTPController) SetHideSong(w http.ResponseWriter, r *http.Request) 
 	}
 
 	ctrl.EncodeDataResponse(r, w, id, nil)
+}
+
+func (ctrl *HTTPController) GetSongsByArtist(w http.ResponseWriter, r *http.Request) {
+	artist := ctrl.GetParam(r, "artist")
+	if artist == "" {
+		ctrl.EncodeEmptyResponse(r, w, plterror.ErrBadSyntax)
+		return
+	}
+
+	option := ctrl.GetParam(r, "option")
+	if option != "random" && option != "sequential" {
+		ctrl.EncodeEmptyResponse(r, w, plterror.InvalidOption)
+		return
+	}
+	limit := ctrl.GetParamInt(r, "limit")
+
+	resp, err := ctrl.Svc.GetSongsByArtist(artist, option, limit)
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
+	}
+	ctrl.EncodeDataResponse(r, w, resp, nil)
 }

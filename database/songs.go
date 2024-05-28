@@ -29,6 +29,7 @@ type MusicDatabase interface {
 	RemoveSongFolder(path string) error
 	SetHideSong(id uuid.UUID) error
 	GetSongByID(songID uuid.UUID) (model.Song, error)
+	GetSongsByArtist(artist string, limit int) ([]model.Song, error)
 }
 
 func (p *PostgresDB) AddSong(Song model.Song) (model.Song, error) {
@@ -299,4 +300,23 @@ func (p *PostgresDB) GetSongByID(songID uuid.UUID) (model.Song, error) {
 	}
 
 	return song, nil
+}
+
+func (p *PostgresDB) GetSongsByArtist(artist string, limit int) ([]model.Song, error) {
+	var songs []model.Song
+	var err error
+	if limit == 0 {
+		err = p.Gorm.Model(&songs).
+			Where("artist = ?", artist).
+			Find(&songs).Error
+	} else {
+		err = p.Gorm.Model(&songs).
+			Where("artist = ?", artist).
+			Limit(limit).
+			Find(&songs).Error
+	}
+	if err != nil {
+		return songs, handleError(err)
+	}
+	return songs, nil
 }

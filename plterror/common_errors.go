@@ -13,3 +13,4 @@ var ErrDLNAAccess = &PLTError{message: "ERR_DLNA_NOT_RESPONDING", status: http.S
 var InvalidArtist = &PLTError{message: "ERR_INVALID_ARTIST", status: http.StatusBadRequest}
 var InvalidGAA = &PLTError{message: "ERR_INVALID_GAA", status: http.StatusBadRequest}
 var SongIsFavorite = &PLTError{message: "ERR_SONG_IS_FAVORITE", status: http.StatusConflict}
+var InvalidOption = &PLTError{message: "ERR_INVALID_OPTION", status: http.StatusBadRequest}

@@ -35,6 +35,11 @@ func createUUIDExtension(db *gorm.DB) {
 		err = fmt.Errorf("failed to create uuid extension: %w", err)
 		plterror.LogFatalError(err.Error())
 	}
+	err = db.Exec(`CREATE EXTENSION IF NOT EXISTS "unaccent"`).Error
+	if err != nil {
+		err = fmt.Errorf("failed to create unaccent extension: %w", err)
+		plterror.LogFatalError(err.Error())
+	}
 }
 
 func automigrateTables(db *gorm.DB) {

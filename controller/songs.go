@@ -230,20 +230,25 @@ func (ctrl *HTTPController) SetHideSong(w http.ResponseWriter, r *http.Request) 
 }
 
 func (ctrl *HTTPController) GetSongsByArtist(w http.ResponseWriter, r *http.Request) {
-	artist := ctrl.GetParam(r, "artist")
-	if artist == "" {
+	var body dto.SongsByArtist
+	var ok bool
+	body, ok = ctrl.GetBody(r).(dto.SongsByArtist)
+	if !ok {
 		ctrl.EncodeEmptyResponse(r, w, plterror.ErrBadSyntax)
 		return
 	}
 
-	option := ctrl.GetParam(r, "option")
-	if option != "random" && option != "sequential" {
+	if body.Artist == "" {
+		ctrl.EncodeEmptyResponse(r, w, plterror.ErrBadSyntax)
+		return
+	}
+
+	if body.Option != "random" && body.Option != "sequential" {
 		ctrl.EncodeEmptyResponse(r, w, plterror.InvalidOption)
 		return
 	}
-	limit := ctrl.GetParamInt(r, "limit")
 
-	resp, err := ctrl.Svc.GetSongsByArtist(artist, option, limit)
+	resp, err := ctrl.Svc.GetSongsByArtist(body.Artist, body.Option, body.Limit)
 	if err != nil {
 		ctrl.EncodeEmptyResponse(r, w, err)
 		return

@@ -613,7 +613,7 @@ func (svc *PLTService) GetSongsByTitle(title string, limit int, getHide bool) ([
 
 func (svc *PLTService) GetSongsByArtist(artist, option string, limit int) ([]dto.Songs, error) {
 	var songs []dto.Songs
-	songsDB, err := svc.DB.GetSongsByArtist(artist, limit)
+	songsDB, err := svc.DB.GetSongsByArtist(artist, 0)
 	if err != nil {
 		return songs, err
 	}
@@ -621,6 +621,10 @@ func (svc *PLTService) GetSongsByArtist(artist, option string, limit int) ([]dto
 	//Random slice
 	if option == "random" {
 		songsDB = randomSlice(songsDB)
+	}
+
+	if len(songsDB) < limit {
+		limit = len(songsDB)
 	}
 
 	for i := 0; i < limit; i++ {

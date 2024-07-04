@@ -4,6 +4,6 @@ WORKDIR /app
 COPY pltapi .
 COPY config.json .
 
-EXPOSE 8080
+EXPOSE 6061
 
 CMD ["/app/pltapi"]

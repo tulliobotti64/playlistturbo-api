@@ -224,9 +224,10 @@ func (p *PostgresDB) GetArtistByGenre(genreID int) ([]model.Song, error) {
 }
 func (p *PostgresDB) GetAlbumByArtist(artist string) ([]model.Song, error) {
 	var songs []model.Song
+	whereArtist := `unaccent(artist) ilike '%` + artist + `%'`
 	err := p.Gorm.Model(&songs).
 		Select("album").
-		Where("artist = ?", artist).
+		Where(whereArtist).
 		Group("album").
 		Order("album").
 		Find(&songs).Error
@@ -239,13 +240,14 @@ func (p *PostgresDB) GetAlbumByArtist(artist string) ([]model.Song, error) {
 func (p *PostgresDB) GetSongsByAlbum(album string, limit int) ([]model.Song, error) {
 	var songs []model.Song
 	var err error
+	whereAlbum := `unaccent(album) ilike '%` + album + `%'`
 	if limit == 0 {
 		err = p.Gorm.Model(&songs).
-			Where("album = ?", album).
+			Where(whereAlbum).
 			Find(&songs).Error
 	} else {
 		err = p.Gorm.Model(&songs).
-			Where("album = ?", album).
+			Where(whereAlbum).
 			Limit(limit).
 			Find(&songs).Error
 	}
@@ -305,13 +307,14 @@ func (p *PostgresDB) GetSongByID(songID uuid.UUID) (model.Song, error) {
 func (p *PostgresDB) GetSongsByArtist(artist string, limit int) ([]model.Song, error) {
 	var songs []model.Song
 	var err error
+	whereArtist := `unaccent(artist) ilike '%` + artist + `%'`
 	if limit == 0 {
 		err = p.Gorm.Model(&songs).
-			Where("artist = ?", artist).
+			Where(whereArtist).
 			Find(&songs).Error
 	} else {
 		err = p.Gorm.Model(&songs).
-			Where("artist = ?", artist).
+			Where(whereArtist).
 			Limit(limit).
 			Find(&songs).Error
 	}

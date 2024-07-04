@@ -86,9 +86,3 @@ type Favorites struct {
 	Genre  string `json:"genre"`
 	Artist string `json:"artist"`
 }
-
-type SongsByArtist struct {
-	Artist string `json:"artist"`
-	Option string `json:"option"`
-	Limit  int    `json:"limit"`
-}

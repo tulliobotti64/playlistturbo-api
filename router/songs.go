@@ -141,7 +141,21 @@ func SongsRoutes(ctrl controller.Controller) []Route {
 			Path:    "/songsbyartist",
 			Method:  http.MethodGet,
 			Handler: ctrl.GetSongsByArtist,
-			Body:    dto.SongsByArtist{},
+			Body:    nil,
+			Params: middlewares.Params{
+				{
+					Name:       "artist",
+					Validation: "required",
+				},
+				{
+					Name:       "option",
+					Validation: "required",
+				},
+				{
+					Name:       "limit",
+					Validation: "required",
+				},
+			},
 		},
 	}
 }

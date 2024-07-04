@@ -62,7 +62,7 @@ func SongsRoutes(ctrl controller.Controller) []Route {
 			},
 		},
 		{
-			Path:    "/favorite/{id}",
+			Path:    "/favorite",
 			Method:  http.MethodPut,
 			Handler: ctrl.SetFavoriteSong,
 			Body:    nil,

@@ -262,10 +262,12 @@ func (p *PostgresDB) GetFavorites(genre, artist string) ([]model.Song, error) {
 	var err error
 	search := "favorite "
 	if genre != "" {
-		search += `and genre_tag = '` + genre + `'`
+		lGenre := strings.ToLower(genre)
+		search += `and lower(genre_tag) = '` + lGenre + `'`
 	}
 	if artist != "" {
-		search += ` and artist = '` + artist + `'`
+		lArtist := strings.ToLower(artist)
+		search += ` and lower(artist) = '` + lArtist + `'`
 	}
 
 	err = p.Gorm.Model(&songs).

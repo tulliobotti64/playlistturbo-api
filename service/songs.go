@@ -789,6 +789,14 @@ func (svc *PLTService) GetFavorites(genre, artist string) ([]dto.Songs, error) {
 		return songsDto, err
 	}
 
+	if len(songs) == 0 {
+		if len(genre) > 0 {
+			return songsDto, plterror.InvalidGenre
+		} else {
+			return songsDto, plterror.InvalidArtist
+		}
+	}
+
 	for _, songDB := range songs {
 		var songDto dto.Songs
 		songDto = dto.ToDtoSongs(songDB, songDto)

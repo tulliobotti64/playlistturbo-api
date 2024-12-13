@@ -157,5 +157,11 @@ func SongsRoutes(ctrl controller.Controller) []Route {
 				},
 			},
 		},
+		{
+			Path:    "/fixtwonkylink",
+			Method:  http.MethodPost,
+			Handler: ctrl.FixTwonkyLink,
+			Body:    dto.ImportSongs{},
+		},
 	}
 }

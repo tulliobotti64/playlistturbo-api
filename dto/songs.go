@@ -86,3 +86,9 @@ type Favorites struct {
 	Genre  string `json:"genre"`
 	Artist string `json:"artist"`
 }
+
+type FixSongs struct {
+	Folder    string `json:"folder"`
+	FileType  string `json:"fileType"`
+	Recursive bool   `json:"recursive"`
+}

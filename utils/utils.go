@@ -175,3 +175,9 @@ func ValidateGAA(s string) bool {
 	}
 	return false
 }
+func ValidateMedia(s string) bool {
+	if s == "mp3" {
+		return true
+	}
+	return false
+}

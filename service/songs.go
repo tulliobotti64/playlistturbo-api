@@ -48,6 +48,8 @@ type SongsService interface {
 	GetFavorites(genre, artist string) ([]dto.Songs, error)
 	SetHideSong(id uuid.UUID) error
 	GetSongsByArtist(artist, option string, limit int) ([]dto.Songs, error)
+	FixSongs(dto.FixSongs) ([]dto.Songs, error)
+	FixTwonkyLink(importSongs dto.ImportSongs) error
 }
 
 func (svc *PLTService) AddSong(Song model.Song) error {
@@ -817,6 +819,118 @@ func (svc *PLTService) SetHideSong(id uuid.UUID) error {
 		err = svc.DB.SetHideSong(id)
 		if err != nil {
 			return err
+		}
+	}
+	return nil
+}
+
+func (svc *PLTService) FixSongs(songs dto.FixSongs) ([]dto.Songs, error) {
+	// 	ler o db de musicas e com base nele:
+	//  se o mp3 estiver corrompindo
+	//    copiar o arquivo em um temp dir
+	//    rodar o programa: mp3check /tempdir/file.mp3 --cut-junk-start --cut-junk-end --fix-headers
+	//    deletar o arquivo da pasta do nas
+	//    copiar o arquivo de /tempdir/file.mp3 para o diretorio do Nas
+	//    atualizar campo twonky_link como vazio
+	//    verificar se tags mp3 estao ok
+	//  no final do processo:
+	//  ler todos os regs com twonky_link = ""
+	//     e atualizar twonky_link
+
+	// verify path
+	// var fixedSongs []dto.Songs
+	// if _, err := os.Stat(songs.Folder); os.IsNotExist(err) {
+	// 	log.Println("error reading dir:", err, songs.Folder)
+	// 	return fixedSongs, plterror.InvalidSongPath
+	// }
+
+	// fileList := make([]string, 0)
+	// var fList = make([]string, 0)
+	// extension := "*." + songs.FileType
+	// fList, err = svc.WalkMatch(songs.Folder, extension, songs.Recursive)
+	// if err != nil {
+	// 	log.Println("error on Walkmatch:", err)
+	// 	return msg, err
+	// }
+	// fileList = append(fileList, fList...)
+
+	// for _, songPath := range fileList {
+	// 	song := model.Song{}
+	// 	var err error
+	// 	if strings.Contains(songPath, "mp3") {
+	// 		// songTitle := strings.Split(songPath, "/")
+	// 		song, err = svc.processMp3(songPath, songExtraTable, importSongs.GenreFromPath, importSongs.GenreArtistAlbum)
+	// 		if err != nil {
+	// 			log.Println("error returning from processMp3:", err)
+	// 			return msg, err
+	// 		}
+	// 	}
+
+	// 	if strings.Contains(songPath, "flac") {
+	// 		song, err = svc.processFlac(songPath)
+	// 		if err != nil {
+	// 			log.Println("error returning from processFlac:", err)
+	// 			return msg, err
+	// 		}
+	// 	}
+
+	// 	exist, err := svc.DB.SearchFilePath(songPath)
+	// 	if err != nil {
+	// 		log.Println("error returning from SearchingFIlePath:", err)
+	// 		return msg, err
+	// 	}
+
+	// 	if !exist {
+	// 		_, err = svc.DB.AddSong(song)
+	// 		if err != nil {
+	// 			log.Printf("error adding song: %s", song.Title)
+	// 			log.Printf("error : %v\n", err)
+	// 			return msg, err
+	// 		}
+	// 		msg.SongQty++
+	// 	}
+	// }
+	return nil, nil
+}
+
+func (svc *PLTService) FixTwonkyLink(importSongs dto.ImportSongs) error {
+	// verify path
+	if _, err := os.Stat(importSongs.Path); os.IsNotExist(err) {
+		log.Println("error reading dir:", err, importSongs.Path)
+		return plterror.InvalidSongPath
+	}
+
+	songExtraTable, err := GetSongExtraTable(importSongs)
+	if err != nil {
+		log.Println("error importing songs:", err)
+		return err
+	}
+	fmt.Println(songExtraTable)
+
+	extension := "*." + importSongs.SongExtension
+	fileList, err := svc.WalkMatch(importSongs.Path, extension, importSongs.Recursive)
+	if err != nil {
+		log.Println("error on Walkmatch:", err)
+		return err
+	}
+
+	for _, songPath := range fileList {
+		fp := strings.Split(songPath, "/")
+		filename := fp[len(fp)-1]
+
+		//com o filename procurar na tab. songExtraTable
+		for _, songET := range songExtraTable {
+
+			if songET.Filename == filename {
+				song, err := svc.DB.GetOneSongByPath(songPath)
+				if err != nil {
+					log.Println("error getting song by path:", err)
+					return err
+				}
+				svc.DB.UpdateTwonkyLinks(song.ID, songET.URL, songET.AlbumArtURI)
+				fmt.Println("song updated:", song.Title)
+				break
+			}
 		}
 	}
 	return nil

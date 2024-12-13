@@ -24,6 +24,8 @@ type SongsController interface {
 	GetFavorites(w http.ResponseWriter, r *http.Request)
 	SetHideSong(w http.ResponseWriter, r *http.Request)
 	GetSongsByArtist(w http.ResponseWriter, r *http.Request)
+	FixSongs(w http.ResponseWriter, r *http.Request)
+	FixTwonkyLink(w http.ResponseWriter, r *http.Request)
 }
 
 func (ctrl *HTTPController) AddSong(w http.ResponseWriter, r *http.Request) {
@@ -251,4 +253,56 @@ func (ctrl *HTTPController) GetSongsByArtist(w http.ResponseWriter, r *http.Requ
 		return
 	}
 	ctrl.EncodeDataResponse(r, w, resp, nil)
+}
+
+func (ctrl *HTTPController) FixSongs(w http.ResponseWriter, r *http.Request) {
+	//TODO
+	var body dto.FixSongs
+	var ok bool
+	body, ok = ctrl.GetBody(r).(dto.FixSongs)
+	if !ok {
+		ctrl.EncodeEmptyResponse(r, w, plterror.ErrBadSyntax)
+		return
+	}
+
+	err := utils.ValidSongExtension(body.FileType)
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
+	}
+
+	songs, err := ctrl.Svc.FixSongs(body)
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
+	}
+
+	ctrl.EncodeDataResponse(r, w, songs, nil)
+}
+
+func (ctrl *HTTPController) FixTwonkyLink(w http.ResponseWriter, r *http.Request) {
+	var body dto.ImportSongs
+	var ok bool
+	body, ok = ctrl.GetBody(r).(dto.ImportSongs)
+	if !ok {
+		ctrl.EncodeEmptyResponse(r, w, plterror.ErrBadSyntax)
+		return
+	}
+
+	if !utils.ValidateGAA(body.GenreArtistAlbum) {
+		ctrl.EncodeEmptyResponse(r, w, plterror.InvalidGAA)
+		return
+	}
+	err := utils.ValidSongExtension(body.SongExtension)
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
+	}
+
+	err = ctrl.Svc.FixTwonkyLink(body)
+	if err != nil {
+		ctrl.EncodeEmptyResponse(r, w, err)
+		return
+	}
+	ctrl.EncodeDataResponse(r, w, nil, nil)
 }

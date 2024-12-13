@@ -905,7 +905,6 @@ func (svc *PLTService) FixTwonkyLink(importSongs dto.ImportSongs) error {
 		log.Println("error importing songs:", err)
 		return err
 	}
-	fmt.Println(songExtraTable)
 
 	extension := "*." + importSongs.SongExtension
 	fileList, err := svc.WalkMatch(importSongs.Path, extension, importSongs.Recursive)
@@ -928,7 +927,6 @@ func (svc *PLTService) FixTwonkyLink(importSongs dto.ImportSongs) error {
 					return err
 				}
 				svc.DB.UpdateTwonkyLinks(song.ID, songET.URL, songET.AlbumArtURI)
-				fmt.Println("song updated:", song.Title)
 				break
 			}
 		}
